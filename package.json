@@ -18,6 +18,7 @@
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "moment": "^2.29.1",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "statman-stopwatch": "^2.12.0"
   }
 }
