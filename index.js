@@ -11,7 +11,7 @@ const { consoleTimestamp } = require('./Utilities/timestamp');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
-const commandFiles = fs.readdirSync('./SlashCommands').filter(x=> x.endsWith('.js'));
+const commandFiles = fs.readdirSync('./SlashCommands').filter(x => x.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`./SlashCommands/${file}`);
@@ -20,7 +20,7 @@ for (const file of commandFiles) {
 
 }
 
-const eventFiles = fs.readdirSync('./Events').filter(x=>x.endsWith('.js'));
+const eventFiles = fs.readdirSync('./Events').filter(x => x.endsWith('.js'));
 for (const file of eventFiles) {
 	const event = require(`./Events/${file}`);
 
