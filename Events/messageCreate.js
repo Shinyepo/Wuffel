@@ -2,6 +2,7 @@ module.exports = {
         name: 'messageCreate',
         on: true,
         async execute(client, message) {
+                console.log(typeof (message));
                 if (message.author.bot) return;
 
                 if (message.content.indexOf(client.config.prefix) !== 0) return console.log('nie ma prefixu');
