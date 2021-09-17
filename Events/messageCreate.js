@@ -1,6 +1,12 @@
+const { Client, Message } = require('discord.js');
+
 module.exports = {
         name: 'messageCreate',
         on: true,
+        /**
+        * @param {Client} client Current Discord client
+        * @param {Message} message Message assosiated with the evvent.
+        */
         async execute(client, message) {
                 console.log(typeof (message));
                 if (message.author.bot) return;

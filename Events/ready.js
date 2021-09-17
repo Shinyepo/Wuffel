@@ -1,9 +1,13 @@
 const { consoleTimestamp } = require('../Utilities/timestamp');
 const { connection } = require('../Configuration/Sequelize');
+const { Client } = require('discord.js');
 
 module.exports = {
     name: 'ready',
     once : true,
+    /**
+    * @param {Client} client Current Discord client
+    */
     execute(client) {
 
         // ------------ Syncing Models with Database------------

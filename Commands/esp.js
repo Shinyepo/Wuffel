@@ -1,5 +1,4 @@
-const { APIMessage } = require('discord-api-types');
-const { Client } = require('discord.js');
+const { Client, Message } = require('discord.js');
 
 module.exports = {
     data: {
@@ -8,7 +7,7 @@ module.exports = {
     },
     /**
      * @param {Client} client Current Discord client
-     * @param {APIMessage} message Message from Command Handler
+     * @param {Message} message Message from Command Handler
      */
     async execute(client, message) {
         client.emit(message.content, message.author, message.author);
