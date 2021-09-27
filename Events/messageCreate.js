@@ -1,4 +1,4 @@
-const { Client, Message } = require('discord.js');
+const { Client, Message, MessageEmbed } = require('discord.js');
 
 module.exports = {
         name: 'messageCreate',
@@ -10,7 +10,7 @@ module.exports = {
         async execute(client, message) {
                 if (message.author.bot) return;
 
-                if (message.content.indexOf(client.config.prefix) !== 0) return console.log('nie ma prefixu');
+                if (message.content.indexOf(client.config.prefix) !== 0) return;
 
                 const args = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
                 const commandName = args.shift().toLowerCase();
