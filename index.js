@@ -1,104 +1,16 @@
-'use strict';
-// -------------- Requires --------------
-
-const fs = require('fs');
-const { Client, Intents, Collection } = require('discord.js');
-const config = require('./config.json');
+const { ShardingManager } = require('discord.js');
+const { token } = require('./config.json');
 const { consoleTimestamp } = require('./Utilities/timestamp');
 
-// eslint-disable-next-line no-unused-vars
-const GuildInformation = require('./Models/GuildInformation');
-// -------------- = --------------
+const manager = new ShardingManager('./bot.js', {
+	token: token,
+	respawn: true,
+	totalShards: 2,
+ });
 
-console.log(consoleTimestamp() + ' Initializing bot.');
-const client = new Client({
-		partials: ['MESSAGE', 'CHANNEL', 'REACTION', 'USER', 'GUILD_MEMBER'],
-		intents: [
-			Intents.FLAGS.GUILDS,
-			Intents.FLAGS.GUILD_MESSAGES,
-			Intents.FLAGS.GUILD_VOICE_STATES,
-			Intents.FLAGS.GUILD_PRESENCES,
-			Intents.FLAGS.GUILD_VOICE_STATES,
-		],
-	});
-client.config = config;
+manager.on('shardCreate', shard => console.log(consoleTimestamp() + ` Launching shard ${shard.id} of ${manager.totalShards - 1}`));
 
-// -------------- Slash Commands --------------
-
-let start = Date.now();
-client.commands = new Collection();
-const slashCommandFiles = fs.readdirSync('./SlashCommands').filter(x => x.endsWith('.js'));
-
-for (const file of slashCommandFiles) {
-	const command = require(`./SlashCommands/${file}`);
-	client.commands.set(command.data.name, command);
-	console.log(consoleTimestamp() + ' Successfully loaded Slash Command - ' + command.data.name);
-}
-
-let end = Date.now();
-let sw = (end - start) / 1000;
-console.log(consoleTimestamp() + ' Finished loading Slash Commands in ' + sw + 's\n');
-
-// -------------- = --------------
-
-// -------------- Commands --------------
-
-start = Date.now();
-const CommandFiles = fs.readdirSync('./Commands').filter(x => x.endsWith('.js'));
-
-for (const file of CommandFiles) {
-	const command = require(`./Commands/${file}`);
-	client.commands.set(command.data.name, command);
-	console.log(consoleTimestamp() + ' Successfully loaded Command - ' + command.data.name);
-}
-
-end = Date.now();
-sw = (end - start) / 1000;
-console.log(consoleTimestamp() + ' Finished loading Commands in ' + sw + 's\n');
-
-// -------------- = --------------
-
-// -------------- Events --------------
-
-start = Date.now();
-const eventFiles = fs.readdirSync('./Events').filter(x => x.endsWith('.js'));
-for (const file of eventFiles) {
-	const event = require(`./Events/${file}`);
-
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	}
-	else if (event.on) {
-		client.on(event.name, event.execute.bind(null, client));
-		// (...args) => event.execute(...args)
-	}
-	console.log(consoleTimestamp() + ' Successfully loaded event - ' + event.name);
-}
-end = Date.now();
-sw = (end - start) / 1000;
-console.log(consoleTimestamp() + ' Finished loading Events in ' + sw + 's\n');
-
-// -------------- = --------------
-
-
-// -------------- Slash Command Handler --------------
-
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
-	const command = client.commands.get(interaction.commandName);
-
-	if (!command) return;
-
-	try {
-		await command.execute(interaction);
-	}
-	catch (error) {
-		console.log(error);
-
-	}
+manager.spawn().then((shards) => {
+	console.log('\n' + consoleTimestamp() + ' Finished launching all shards.');
 });
-
-// -------------- = --------------
-
-client.login(config.token);
 

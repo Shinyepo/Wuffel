@@ -1,4 +1,6 @@
 const { Client, Message } = require('discord.js');
+const mongoose = require('mongoose');
+const { GuildInformation } = require('../Database/connection');
 
 module.exports = {
     data: {
@@ -11,8 +13,5 @@ module.exports = {
      */
     async execute(client, message, args) {
         client.emit(args, message.guild);
-        // empty comment 123
-
     },
 };
-
