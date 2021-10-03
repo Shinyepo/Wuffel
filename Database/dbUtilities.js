@@ -12,15 +12,21 @@ async changeSetting(guild, key, value) {
     query[key] = value;
     await Settings.findOneAndUpdate({ guildId: guild.id }, query);
 },
-
 /**
  * @param {Guild} guild guild object to update
  * @param {String} key field to update
  */
-async changeLog(guild, key, value) {
+async changeLogs(guild, key, value) {
     const query = {};
     query[key] = value;
     await Logs.findOneAndUpdate({ guildId: guild.id }, query);
+},
+/**
+ * @param {Guild} guild guild object to update
+ * @param {String} key field to update
+ */
+async getLogs(guild) {
+    return await Logs.findOne({ guildId: guild.id });
 },
 
 /**
