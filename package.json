@@ -2,9 +2,12 @@
   "name": "wuffel",
   "version": "0.0.1",
   "description": "A all purpose discord bot written with discord.js",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "tsc -w",
+    "dev": "nodemon dist/index.js",
+    "deploy": "node dist/Slash-Commands-Deployer.js",
+    "create:migration": "mikro-orm migration:create"
   },
   "keywords": [
     "wuffel"
@@ -15,14 +18,23 @@
     "@babel/helper-compilation-targets": "^7.15.4",
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
+    "@mikro-orm/core": "^4.5.9",
+    "@mikro-orm/postgresql": "^4.5.9",
     "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "moment": "^2.29.1",
-    "mongoose": "^6.0.7",
+    "pg": "^8.7.1",
     "pretty-ms": "^7.0.1",
     "statman-stopwatch": "^2.12.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./mikro-config.ts",
+      "./dist/mikro-config.js"
+    ]
   }
 }

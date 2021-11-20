@@ -1,15 +1,11 @@
-const { Client, Message } = require('discord.js');
+import { CommandType } from "types";
 
-module.exports = {
+export = {
     data: {
         name: 'eval',
         description: 'Eval command for eval',
     },
-    /**
-     * @param {Client} client Current Discord client
-     * @param {Message} message Message from Command Handler
-     */
-    async execute(client, message, args) {
+    async execute(_, message, ...args) {
         if (message.author.id !== '190561911492968448') return;
         const clean = text => {
             if (typeof (text) === 'string') {
@@ -25,12 +21,12 @@ module.exports = {
 
             if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
 
-            message.channel.send(clean(evaled), { code:'xl' });
+            message.channel.send(clean(evaled), { code: 'xl' });
           }
            catch (err) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
           }
 
     },
-};
+} as CommandType;
 
