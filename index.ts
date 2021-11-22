@@ -1,10 +1,9 @@
 import { ShardingManager } from "discord.js";
 import { consoleTimestamp } from "./Utilities/timestamp";
-import { token } from "./config.json";
 
 const main = async () => {
   const manager = new ShardingManager(__dirname + "/bot.js", {
-    token,
+    token: process.env.TOKEN,
     respawn: true,
     totalShards: 1,
   });  
@@ -16,7 +15,7 @@ const main = async () => {
     )
   );
 
-  const shards = await manager.spawn();
+  await manager.spawn();
   console.log("\n" + consoleTimestamp() + " Finished launching all shards.")
 
 };

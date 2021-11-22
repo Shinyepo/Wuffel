@@ -7,12 +7,13 @@ export const addTraffic = async (
   { guild, user }: GuildMember,
   joined: boolean
 ) => {
-  const newEntry = await em.create(GuildTraffic, {
+  const context = em.fork();
+  const newEntry = await context.create(GuildTraffic, {
     guildId: guild.id,
     userId: user.id,
     joined,
   });
 
-  await em.persistAndFlush(newEntry);
+  await context.persistAndFlush(newEntry);
   return;
 };

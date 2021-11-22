@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { token, applicationId, guildId } from "./config.json";
+import { applicationId, guildId } from "./config.json";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 
@@ -20,7 +20,7 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: "9" }).setToken(token);
+const rest = new REST({ version: "9" }).setToken(process.env.TOKEN!);
 
 let readyString = "";
 

@@ -6,7 +6,7 @@ export = {
     name: "esp",
     description: "Testing ground",
   },
-  async execute(client, message, type, args) {
+  async execute(client, message, type, _) {
     if (type === "sr") {
       await addStreamerRanking(client.em, message);
       return;

@@ -1,5 +1,4 @@
 import { Client, Collection } from "discord.js";
-import { token } from "./config.json";
 import { consoleTimestamp } from "./Utilities/timestamp";
 import { SlashCommandType, WuffelClient } from "types";
 import { loadCommands, loadEvents } from "./Utilities/PathLoader";
@@ -59,7 +58,7 @@ const main = async () => {
     }
   });
 
-  client.login(token);
+  client.login(process.env.TOKEN);
 };
 
 main();

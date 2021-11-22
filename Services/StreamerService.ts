@@ -43,7 +43,8 @@ export const addStreamerRanking = async (
   em: EntityManager,
   { guild, member: user }: Message | VoiceState
 ) => {
-  const startedStream = await em.findOne(StreamWatch, {
+  const context = em.fork();
+  const startedStream = await context.findOne(StreamWatch, {
     guildId: guild!.id,
     userId: user!.id,
   });
@@ -53,25 +54,25 @@ export const addStreamerRanking = async (
   const curr = new Date().getTime();
   const time = curr - startingDate;
 
-  const userRanking = await em.findOne(StreamLeaderboard, {
+  const userRanking = await context.findOne(StreamLeaderboard, {
     guildId: guild!.id,
     userId: user!.id,
   });
   if (!userRanking) {
-    const newEntry = await em.create(StreamLeaderboard, {
+    const newEntry = await context.create(StreamLeaderboard, {
       guildId: guild!.id,
       userId: user!.id,
       timeStreamed: time,
     });
 
-    await em.persistAndFlush(newEntry);
+    await context.persistAndFlush(newEntry);
     return;
   }
   const totalTime = parseInt(userRanking!.timeStreamed) + time;
 
   userRanking!.timeStreamed = totalTime.toString();
-  await em.remove(startedStream);
-  await em.flush();
+  await context.remove(startedStream);
+  await context.flush();
 
   return;
 };

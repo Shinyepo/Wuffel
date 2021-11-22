@@ -1,5 +1,5 @@
 import { SlashCommandBuilder} from "@discordjs/builders";
-import { CommandType, SlashCommandType } from "types";
+import { SlashCommandType } from "types";
 
 export = {
     data: new SlashCommandBuilder()
