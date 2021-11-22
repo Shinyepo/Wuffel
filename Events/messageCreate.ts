@@ -8,9 +8,10 @@ export = {
 
   async execute(client: WuffelClient, message: Message) {
     if (message.author.bot) return;
-    const settings = await client.em.findOne(Settings, {
+    const settings = await client.em.fork().findOne(Settings, {
       guildId: message.guildId,
     });
+    
     const prefix = settings?.prefix ?? "+";
 
     if (message.content.indexOf(prefix) !== 0) return;
