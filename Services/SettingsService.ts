@@ -1,6 +1,5 @@
 import { EntityManager } from "@mikro-orm/knex";
 import { Guild, Message } from "discord.js";
-import messageCreate from "Events/messageCreate";
 import { Settings } from "../Entities/Settings";
 
 export const createSettings = async (em: EntityManager, guild: Guild) => {

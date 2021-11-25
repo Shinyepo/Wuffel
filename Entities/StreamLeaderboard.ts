@@ -12,6 +12,12 @@ export class StreamLeaderboard {
   userId: string;
 
   @Property()
+  username: string;
+
+  @Property()
+  nickname: string;
+
+  @Property()
   timeStreamed: string;
 
   @Property({ type: "date" })

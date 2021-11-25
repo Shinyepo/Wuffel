@@ -56,13 +56,15 @@ export const addStreamerRanking = async (
 
   const userRanking = await context.findOne(StreamLeaderboard, {
     guildId: guild!.id,
-    userId: user!.id,
+    userId: user!.id
   });
   if (!userRanking) {
     const newEntry = await context.create(StreamLeaderboard, {
       guildId: guild!.id,
       userId: user!.id,
       timeStreamed: time,
+      username: user!.displayName,
+      nickname: user!.nickname
     });
 
     await context.persistAndFlush(newEntry);

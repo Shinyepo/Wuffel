@@ -12,6 +12,12 @@ export class GuildTraffic {
   userId: string;
 
   @Property()
+  username: string;
+
+  @Property({nullable: true})
+  nickname: string;
+
+  @Property()
   joined: boolean;
 
   @Property({ type: "date", onCreate: () => new Date() })
