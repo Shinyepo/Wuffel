@@ -11,7 +11,7 @@ export const getLogSettings = async (
   const context = em.fork();
   const data = await context.findOne(LogSettings, { guildId: guild.id });
   if (!data) return null;
-  const logSettings = data.settings.find((x) => x.name === event);
+  const logSettings = data.settings?.find((x) => x.name === event);
 
   return logSettings;
 };
@@ -25,6 +25,7 @@ export const setLogChannel = async (
   const context = em.fork();
   const data = await context.findOne(LogSettings, { guildId });
   const newSettings = {
+    id: "1",
     name: event,
     channel,
     on: true,
@@ -40,12 +41,16 @@ export const setLogChannel = async (
     return true;
   }
 
-  const settings = data?.settings.find(
+  const settings = data?.settings?.find(
     (x) => x.name.toLowerCase() === event.toLowerCase()
   );
 
   if (!settings) {
-    data?.settings.push(newSettings);
+    const id = data.settings?.length! + 1;
+    newSettings.id = id.toString();
+    console.log(newSettings.id);
+    
+    data?.settings?.push(newSettings);
     await context.flush();
     return true;
   }
@@ -65,7 +70,7 @@ export const toggleLog = async (
   const data = await context.findOne(LogSettings, { guildId });
   if (!data) return null;
 
-  const settings = data.settings.find(
+  const settings = data.settings?.find(
     (x) => x.name.toLowerCase() === event.toLowerCase()
   );
 

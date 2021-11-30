@@ -10,7 +10,7 @@ export class LogSettings {
   guildId: string;
 
   @Property({ type: "json", nullable: true})
-  settings: LogObject[];
+  settings?: LogObject[];
 
   @Property({ type: "date", onCreate: () => new Date() })
   createdAt: string;

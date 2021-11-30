@@ -28,11 +28,12 @@ export type WuffelClient = {
 } & Client;
 
 export class IgnoredLogObject {
-  users: String[];
-  channels: String[];
+  users?: String[];
+  channels?: String[];
 }
 
 export class LogObject {
+  id: string;
   name: String;
   on?: Boolean;
   channel?: String;
