@@ -1,5 +1,5 @@
 import { prefixChange } from "../Services/SettingsService";
-import { CommandType } from "types";
+import { CommandType } from "../../types";
 
 export = {
   data: {

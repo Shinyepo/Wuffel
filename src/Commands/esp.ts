@@ -1,5 +1,6 @@
 import { addStreamerRanking } from "../Services/StreamerService";
-import { CommandType } from "types";
+import { CommandType } from "../../types";
+import { setLogChannel } from "../Services/LogsService";
 
 export = {
   data: {
@@ -7,6 +8,11 @@ export = {
     description: "Testing ground",
   },
   async execute(client, message, type, number) {
+    if (type === "messageDelete" || type === "cipskoinasso") {      
+      const channel = message.mentions.channels.first();
+      await setLogChannel(client.em, message.guildId!, type, channel!.id);
+      return;
+    }
     if (type === "sr") {
       await addStreamerRanking(client.em, message);
       return;

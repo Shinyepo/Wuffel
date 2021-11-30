@@ -1,6 +1,6 @@
 import { Guild } from "discord.js";
 import { createSettings } from "../Services/SettingsService";
-import { EventType, WuffelClient } from "types";
+import { EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "../Utilities/timestamp";
 
 export = {

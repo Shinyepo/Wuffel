@@ -2,7 +2,7 @@ import {
   addStreamerRanking,
   insertStartedStream,
 } from "../Services/StreamerService";
-import { EventType, WuffelClient } from "types";
+import { EventType, WuffelClient } from "../../types";
 import { VoiceState } from "discord.js";
 
 export = {

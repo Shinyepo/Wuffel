@@ -1,10 +1,10 @@
 import { Client, Collection } from "discord.js";
-import { consoleTimestamp } from "./Utilities/timestamp";
-import { SlashCommandType, WuffelClient } from "types";
-import { loadCommands, loadEvents } from "./Utilities/PathLoader";
 import { MikroORM } from "@mikro-orm/core";
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 import mikroOrmConfig from "./mikro-config"
+import { WuffelClient, SlashCommandType } from "./types";
+import { consoleTimestamp } from "./src/Utilities/timestamp";
+import { loadCommands, loadEvents } from "./src/Utilities/PathLoader";
 
 const main = async () => {
   console.log(consoleTimestamp() + " Initializing Shard...");

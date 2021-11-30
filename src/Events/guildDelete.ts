@@ -1,6 +1,6 @@
 import { Guild } from "discord.js";
 import { removeSettings } from "../Services/SettingsService";
-import { WuffelClient } from "types";
+import { WuffelClient } from "../../types";
 import { consoleTimestamp } from "../Utilities/timestamp";
 
 export = {

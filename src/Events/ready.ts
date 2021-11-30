@@ -1,5 +1,5 @@
 import { Client } from "discord.js";
-import { EventType } from "types";
+import { EventType } from "../../types";
 import { consoleTimestamp } from "../Utilities/timestamp";
 
 export = {

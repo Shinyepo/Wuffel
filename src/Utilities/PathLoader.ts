@@ -1,5 +1,5 @@
 import fs from "fs";
-import { CommandType, EventType, WuffelClient } from "types";
+import { CommandType, EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "./timestamp";
 import path from "path";
 

@@ -1,5 +1,5 @@
 import { StreamLeaderboard } from "../Entities/StreamLeaderboard";
-import { CommandType } from "types";
+import { CommandType } from "../../types";
 import prettyMilliseconds from "pretty-ms";
 import { LeaderboardEmbed } from "../Utilities/embedCreator";
 

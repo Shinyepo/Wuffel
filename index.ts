@@ -1,5 +1,5 @@
 import { ShardingManager } from "discord.js";
-import { consoleTimestamp } from "./Utilities/timestamp";
+import { consoleTimestamp } from "./src/Utilities/timestamp";
 
 const main = async () => {
   const manager = new ShardingManager(__dirname + "/bot.js", {

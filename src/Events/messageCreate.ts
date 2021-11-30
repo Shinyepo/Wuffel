@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { Settings } from "../Entities/Settings";
-import { CommandType, WuffelClient } from "types";
+import { CommandType, WuffelClient } from "../../types";
 
 export = {
   name: "messageCreate",
@@ -19,7 +19,7 @@ export = {
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const commandName = args.shift()?.toLowerCase();
 
-    const command = client.commands.get(commandName!) as CommandType;
+    const command = client.commands.find(x=>x.data.name.toLowerCase() === commandName) as CommandType;
 
     if (!command) return;
 

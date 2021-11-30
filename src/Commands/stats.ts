@@ -1,5 +1,5 @@
 import prettyMilliseconds from "pretty-ms";
-import { CommandType } from "types";
+import { CommandType } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator"
 
 export = {
