@@ -44,7 +44,8 @@ export const loadEvents = async (client: WuffelClient): Promise<void> => {
     if (event.once) {
       client.once(event.name, (...args) => event.execute(...args));
     } else if (event.on) {
-      client.on(event.name, event.execute.bind(null, client));
+      client.on(event.name, (...args) => event.execute(client, ...args));
+      // client.on(event.name, event.execute.bind(null, client));
     }
   }
   const end = Date.now();

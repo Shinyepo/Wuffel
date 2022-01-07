@@ -5,10 +5,10 @@ import { getLogSettings } from "../Services/LogsService";
 
 export = {
   name: "messageDelete",
-  once: true,
+  on: true,
   async execute(client: WuffelClient, message: Message) {
     if (message.author.bot || !message.guild) return null;
-    const settings = await getLogSettings(client.em, message.guild, this.name);
+    const settings = await getLogSettings(client.em, message.guild, "messageEvents");
     if (!settings || !settings.on || !settings.channel) return null;
     
     const em = new InfoEmbed(message).setTitle(
@@ -19,7 +19,6 @@ export = {
 
     const channel = message.guild.channels.cache.find(x=>x.id === settings.channel) as TextBasedChannels;
     if (!channel) return null;
-    message.channel
 
 
     return await channel.send({embeds: [em]});
