@@ -15,11 +15,11 @@ export class GuildTraffic {
   username: string;
 
   @Property({nullable: true})
-  nickname: string;
+  nickname?: string;
 
   @Property()
   joined: boolean;
 
   @Property({ type: "date", onCreate: () => new Date() })
-  createdAt: string;
+  createdAt?: string;
 }

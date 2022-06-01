@@ -13,10 +13,11 @@ export = {
     },
     
     async execute({ em }, message, __) {
-        const leaderboard = await em.find(StreamLeaderboard, { guildId: message.guildId });
+        const context = em.fork();
+        const leaderboard = await context.find(StreamLeaderboard, { guildId: message.guildId });
         if (leaderboard.length < 1) {
             const embed = new LeaderboardEmbed(message);
-            embed.setTitle("Top 0 discord streamers");
+            embed.setTitle("🤔");
             embed.setDescription("There is no data yet. Start streaming now to claim 1st place!")
             return await message.channel.send({embeds: [embed]});
         }

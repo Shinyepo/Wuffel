@@ -1,10 +1,19 @@
 import { EntityManager } from "@mikro-orm/knex";
 import { Guild, Message } from "discord.js";
+import { LogSettings } from "../Entities/LogSettings";
 import { Settings } from "../Entities/Settings";
 
-export const createSettings = async (em: EntityManager, guild: Guild) => {
+export const getSettings = async (em: EntityManager, guild: Guild) => {
   const context = em.fork();
   const settings = await context.findOne(Settings, { guildId: guild.id });
+  const logSettings = await context.findOne(LogSettings, { guildId: guild.id });
+
+  if (!logSettings) {
+    const newEntry = await context.create(LogSettings, {
+      guildId: guild.id,
+    });
+    await context.persistAndFlush(newEntry);
+  }
 
   if (!settings) {
     const newEntry = await context.create(Settings, {
@@ -13,9 +22,9 @@ export const createSettings = async (em: EntityManager, guild: Guild) => {
       userCount: guild.memberCount,
     });
     await context.persistAndFlush(newEntry);
-    return;
+    return newEntry;
   }
-  return;
+  return settings;
 };
 
 export const removeSettings = async (em: EntityManager, guild: Guild) => {
@@ -44,7 +53,7 @@ export const prefixChange = async (
 
   try {
     const context = em.fork();
-    const settings = await context.findOne(Settings, { guildId: guild?.id });    
+    const settings = await context.findOne(Settings, { guildId: guild?.id });
     if (!settings) {
       channel.send("Something went wrong while changing prefix.");
       return;

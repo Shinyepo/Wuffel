@@ -1,4 +1,4 @@
-import { Message, TextBasedChannels } from "discord.js";
+import { Message, TextBasedChannel } from "discord.js";
 import { InfoEmbed } from "../Utilities/embedCreator";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
@@ -17,7 +17,7 @@ export = {
     .setDescription("Content: \n" + message.content)
     .setTimestamp();
 
-    const channel = message.guild.channels.cache.find(x=>x.id === settings.channel) as TextBasedChannels;
+    const channel = message.guild.channels.cache.find(x=>x.id === settings.channel) as TextBasedChannel;
     if (!channel) return null;
 
 

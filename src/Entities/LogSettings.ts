@@ -13,8 +13,8 @@ export class LogSettings {
   settings?: LogObject[];
 
   @Property({ type: "date", onCreate: () => new Date() })
-  createdAt: string;
+  createdAt?: string;
 
   @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  updatedAt? = new Date();
 }

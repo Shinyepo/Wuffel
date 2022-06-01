@@ -18,7 +18,7 @@ export class StreamLeaderboard {
   nickname: string;
 
   @Property()
-  timeStreamed: string;
+  timeStreamed: number;
 
   @Property({ type: "date" })
   createdAt = new Date();

@@ -16,5 +16,5 @@ export class StreamWatch {
     onCreate: () => new Date(),
     onUpdate: () => new Date(),
   })
-  startingDate: string;
+  startingDate?: string;
 }

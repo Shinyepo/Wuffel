@@ -49,7 +49,7 @@ export const addStreamerRanking = async (
     userId: user!.id,
   });
   if (!startedStream) return;
-  const startingDate = Date.parse(startedStream.startingDate);
+  const startingDate = Date.parse(startedStream.startingDate!);
 
   const curr = new Date().getTime();
   const time = curr - startingDate;
@@ -72,7 +72,7 @@ export const addStreamerRanking = async (
   }
   const totalTime = parseInt(userRanking!.timeStreamed) + time;
 
-  userRanking!.timeStreamed = totalTime.toString();
+  userRanking!.timeStreamed = totalTime;
   await context.remove(startedStream);
   await context.flush();
 

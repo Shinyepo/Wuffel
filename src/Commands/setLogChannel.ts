@@ -1,6 +1,5 @@
-import { TextChannel } from "discord.js";
 import { CommandType } from "../../types";
-import { setLogChannel, toggleLog } from "../Services/LogsService";
+import { setLogChannel } from "../Services/LogsService";
 import { ExtractId } from "../Utilities/idExtractor";
 
 export = {
