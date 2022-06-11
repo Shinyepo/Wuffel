@@ -1,6 +1,6 @@
 import { StreamLeaderboard } from "../Entities/StreamLeaderboard";
 import { CommandType } from "../../types";
-import prettyMilliseconds from "pretty-ms";
+import format from "format-duration";
 import { LeaderboardEmbed } from "../Utilities/embedCreator";
 
 const emotes = ['🥇', '🥈', '🥉', '<:medal4:831979903049007114>', '<:medal5:831979917230735381>'];
@@ -12,6 +12,7 @@ export = {
         description: 'Display top5 streamers discord streamers',
     },
     
+  permissionLevel: "all",
     async execute({ em }, message, __) {
         const context = em.fork();
         const leaderboard = await context.find(StreamLeaderboard, { guildId: message.guildId });
@@ -28,7 +29,7 @@ export = {
             const userData = leaderboard[i];
             const member = message.guild!.members.cache.get(userData.userId);
             if (!member) continue;
-            const formatedTime = prettyMilliseconds(parseInt(userData.timeStreamed), { compact: true, verbose: true });
+            const formatedTime = format(userData.timeStreamed);
             const name = member?.nickname ?? member?.user.username;
             data += emotes[i] + ' **' + name + '** ' + formatedTime + '\n';
             i++;

@@ -1,4 +1,4 @@
-import prettyMilliseconds from "pretty-ms";
+import format from "format-duration";
 import { CommandType } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator"
 
@@ -7,8 +7,9 @@ export = {
         name: 'stats',
         description: 'Display statistics for current shard',
     },
+    permissionLevel: "all",
     async execute(client, message, _) {
-        const formatedTime = prettyMilliseconds(client.uptime!, { compact: true });
+        const formatedTime = format(client.uptime!);
 
         const em = new InfoEmbed(message)
             .setTitle('Statistics of the shard this guild is on.')

@@ -42,7 +42,7 @@ const main = async () => {
     if (!command) return;
 
     try {
-      await command.execute(interaction);
+      await command.execute(client, interaction);
       console.log(
         consoleTimestamp() +
           " #" +

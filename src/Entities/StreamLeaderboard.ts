@@ -14,15 +14,15 @@ export class StreamLeaderboard {
   @Property()
   username: string;
 
-  @Property()
-  nickname: string;
+  @Property({nullable: true})
+  nickname?: string;
 
   @Property()
   timeStreamed: number;
 
   @Property({ type: "date" })
-  createdAt = new Date();
+  createdAt? = new Date();
 
   @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  updatedAt? = new Date();
 }

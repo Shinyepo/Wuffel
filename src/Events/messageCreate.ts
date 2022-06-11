@@ -29,6 +29,46 @@ export = {
 
     if (!command) return;
 
+
+    if (command.permissionLevel) {
+      const perm = command.permissionLevel;
+      
+      const owner =
+        message.author.id === (await client.application?.fetch())!.owner?.id;
+      const admin = message.member?.roles.cache.find(
+        (x) => x.id === settings.adminRole
+      ) !== undefined;
+      const mod = message.member?.roles.cache.find(
+        (x) => x.id === settings.modRole
+      ) !== undefined;
+      const guildMember = message.member?.roles.cache.find(
+        (x) => x.id === settings.guildRole
+      ) !== undefined;
+    
+
+      if (perm === "owner") {
+        if (!owner) return message.reply("Missing permission");
+      } else if (perm === "admin") {
+        if (!admin) {
+          if (!owner) return message.reply("Missing permission");
+        }
+      } else if (perm === "mod") {
+        if (!mod) {
+          if (!admin) {
+            if (!owner) return message.reply("Missing permission");
+          }
+        }
+      } else if (perm === "guildMember") {
+        if (!guildMember) {
+          if (!mod) {
+            if (!admin) {
+              if (!owner) return message.reply("Missing permission");
+            }
+          }
+        }
+      }
+    }
+
     return command.execute(client, message, ...args);
   },
 };

@@ -7,6 +7,7 @@ export = {
     description:
       "You can turn on/off logs with this command without destroying its configuration.",
   },
+  permissionLevel: "admin",
   async execute(client, message, eventName, state) {
     if (!message.guildId) return null;
     let convertedState;

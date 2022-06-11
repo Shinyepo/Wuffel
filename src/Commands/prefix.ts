@@ -6,6 +6,7 @@ export = {
     name: "prefix",
     description: "You can change prefix with this command",
   },
+  permissionLevel: "admin",
   async execute(client, message, arg) {
     await prefixChange(client.em, message, arg);
   },

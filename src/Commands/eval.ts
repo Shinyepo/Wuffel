@@ -5,6 +5,7 @@ export = {
         name: 'eval',
         description: 'Eval command for eval',
     },
+    permissionLevel: "owner",
     async execute(_, message, ...args) {
         if (message.author.id !== '190561911492968448') return;
         const clean = (text: string) => {

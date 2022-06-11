@@ -70,7 +70,7 @@ export const addStreamerRanking = async (
     await context.persistAndFlush(newEntry);
     return;
   }
-  const totalTime = parseInt(userRanking!.timeStreamed) + time;
+  const totalTime = userRanking!.timeStreamed + time;
 
   userRanking!.timeStreamed = totalTime;
   await context.remove(startedStream);

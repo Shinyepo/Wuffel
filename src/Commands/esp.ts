@@ -7,6 +7,7 @@ export = {
     name: "esp",
     description: "Testing ground",
   },
+  permissionLevel: "owner",
   async execute(client, message, type, number) {
     if (type === "messageDelete" || type === "cipskoinasso") {      
       const channel = message.mentions.channels.first();

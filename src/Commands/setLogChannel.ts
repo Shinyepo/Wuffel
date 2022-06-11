@@ -7,6 +7,7 @@ export = {
     name: "setLogChannel",
     description: "Set a channel, for a event, to which logs will be sent.",
   },
+  permissionLevel: "owner",
   async execute(client, message, eventName, channel) {
     if (!message.guild) return null;
     const extractedChannel = await ExtractId(message.guild, channel, "channel");

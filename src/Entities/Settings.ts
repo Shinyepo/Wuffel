@@ -2,6 +2,7 @@ import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 
 @Entity({ tableName: "bot.settings" })
 export class Settings {
+  [key: string]: any;
   @PrimaryKey()
   id: number;
 
@@ -15,20 +16,23 @@ export class Settings {
   userCount: string;
 
   @Property({ nullable: true })
-  modRole: string;
+  guildRole?: string;
 
   @Property({ nullable: true })
-  adminRole: string;
+  modRole?: string;
 
   @Property({ nullable: true })
-  muteRole: string;
+  adminRole?: string;
+
+  @Property({ nullable: true })
+  muteRole?: string;
 
   @Property({ nullable: true, type: "text" })
-  disabledCommands: string;
+  disabledCommands?: string;
 
   @Property({ nullable: true })
-  systemNotice: Boolean;
+  systemNotice?: Boolean;
 
   @Property({ nullable: true })
-  cleanup: Boolean;
+  cleanup?: Boolean;
 }

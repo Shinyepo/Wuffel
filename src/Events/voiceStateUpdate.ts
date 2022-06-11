@@ -9,7 +9,11 @@ export = {
   name: "voiceStateUpdate",
   on: true,
 
-  async execute(client: WuffelClient, oldState: VoiceState, newState: VoiceState) {
+  async execute(
+    client: WuffelClient,
+    oldState: VoiceState,
+    newState: VoiceState
+  ) {
     if (oldState.streaming !== newState.streaming) {
       if (newState.streaming === true) {
         await insertStartedStream(client.em, newState);

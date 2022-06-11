@@ -1,29 +1,21 @@
 import { EntityManager } from "@mikro-orm/knex";
 import { Guild, Message } from "discord.js";
-import { LogSettings } from "../Entities/LogSettings";
+import { WuffelClient } from "Wuffel/types";
 import { Settings } from "../Entities/Settings";
 
-export const getSettings = async (em: EntityManager, guild: Guild) => {
-  const context = em.fork();
-  const settings = await context.findOne(Settings, { guildId: guild.id });
-  const logSettings = await context.findOne(LogSettings, { guildId: guild.id });
+export const createSettings = async (em: EntityManager, guild: Guild) => {
+  const newEntry = await em.create(Settings, {
+    guildId: guild.id,
+    prefix: "+",
+    userCount: guild.memberCount.toString(),
+  });
+  await em.persistAndFlush(newEntry);
+  return newEntry;
+};
 
-  if (!logSettings) {
-    const newEntry = await context.create(LogSettings, {
-      guildId: guild.id,
-    });
-    await context.persistAndFlush(newEntry);
-  }
-
-  if (!settings) {
-    const newEntry = await context.create(Settings, {
-      guildId: guild.id,
-      prefix: "+",
-      userCount: guild.memberCount,
-    });
-    await context.persistAndFlush(newEntry);
-    return newEntry;
-  }
+export const getSettings = async (em: EntityManager, guild: Guild,) => {
+  var settings = await em.findOne(Settings, { guildId: guild.id });
+  if (!settings) settings = await createSettings(em.fork(), guild);
   return settings;
 };
 
@@ -65,4 +57,18 @@ export const prefixChange = async (
   } catch (error) {
     console.log(error);
   }
+};
+
+export const changeSetting = async (
+  client: WuffelClient,
+  guild: Guild,
+  key: string,
+  value: string
+) => {
+  const settings = await getSettings(client.em, guild);
+  if (!settings) return;
+
+  settings[key] = value;
+  await client.em.flush();
+  return true;
 };
