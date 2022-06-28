@@ -11,7 +11,7 @@ export = {
     async execute(client, message, _) {
         const formatedTime = format(client.uptime!);
 
-        const em = new InfoEmbed(message)
+        const em = new InfoEmbed(client, message)
             .setTitle('Statistics of the shard this guild is on.')
             .addField('Shard Id', client.shard!.ids[0].toString(), true)
             .addField('# of guilds', client.guilds.cache.size.toString(), true)

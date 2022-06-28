@@ -1,13 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { ChannelType } from "discord-api-types/v10";
-import {
-  Collection,
-  GuildTextBasedChannel,
-  Message,
-  MessageResolvable,
-} from "discord.js";
+import { GuildTextBasedChannel, MessageResolvable } from "discord.js";
 import { SlashCommandType } from "../../types";
-import { handled } from "../Utilities/scuffedEH";
 
 export = {
   data: new SlashCommandBuilder()
@@ -32,7 +26,7 @@ export = {
         .addChannelTypes(ChannelType.GuildText)
         .setRequired(false)
     ),
-  async execute(client, interaction) {
+  async execute(_, interaction) {
     const count = interaction.options.getInteger("count");
     let channel = interaction.options.getChannel(
       "channel"
