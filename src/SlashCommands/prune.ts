@@ -25,7 +25,8 @@ export = {
         .setDescription("Choose a channel on which to delete messages")
         .addChannelTypes(ChannelType.GuildText)
         .setRequired(false)
-    ),
+    )
+    .setDMPermission(false),
   async execute(_, interaction) {
     const count = interaction.options.getInteger("count");
     let channel = interaction.options.getChannel(

@@ -6,7 +6,8 @@ import { MessageEmbed } from "discord.js";
 export = {
   data: new SlashCommandBuilder()
     .setName("stats")
-    .setDescription("Check some statistics of the bot."),
+    .setDescription("Check some statistics of the bot.")
+    .setDMPermission(false),
   async execute(client, interaction) {
     const formatedTime = format(client.uptime!);
 
