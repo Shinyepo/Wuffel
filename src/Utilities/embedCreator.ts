@@ -1,12 +1,20 @@
+import { EmbedAuthorData } from "@discordjs/builders";
 import { Message, MessageEmbed } from "discord.js";
+import { WuffelClient } from "Wuffel/types";
 
 export class InfoEmbed extends MessageEmbed {
-  constructor(message: Message, data = {}) {
+  constructor(client: WuffelClient, message?: Message, data = {}) {
     super(data);
-    this.setAuthor(
-      message.author.username + "#" + message.author.discriminator,
-      message.author.avatarURL() ?? message.author.defaultAvatarURL
-    );
+    let author = {
+      name: client.user?.username,
+      iconURL: client.user?.avatarURL(),
+    } as EmbedAuthorData;
+    if (message?.author)
+      author = {
+        name: message.author.username,
+        iconURL: message.author.avatarURL() ?? undefined,
+      };
+    this.setAuthor(author);
     this.setColor("#B1FFFD");
   }
 }

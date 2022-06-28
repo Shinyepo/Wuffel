@@ -8,7 +8,6 @@ import { VoiceState } from "discord.js";
 export = {
   name: "voiceStateUpdate",
   on: true,
-
   async execute(
     client: WuffelClient,
     oldState: VoiceState,

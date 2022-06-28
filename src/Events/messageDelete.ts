@@ -1,26 +1,40 @@
 import { Message, TextBasedChannel } from "discord.js";
-import { InfoEmbed } from "../Utilities/embedCreator";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
+import { InfoEmbed } from "../Utilities/embedCreator";
+import { handled } from "../Utilities/scuffedEH";
 
 export = {
   name: "messageDelete",
   on: true,
   async execute(client: WuffelClient, message: Message) {
-    if (message.author.bot || !message.guild) return null;
-    const settings = await getLogSettings(client.em, message.guild, "messageEvents");
+    if (message.author?.bot || !message.guild) return null;
+    const settings = await getLogSettings(
+      client.em,
+      message.guild,
+      "messageDelete"
+    );
+
     if (!settings || !settings.on || !settings.channel) return null;
-    
-    const em = new InfoEmbed(message).setTitle(
-      "A message was deleted in " + message.channel
-    )
-    .setDescription("Content: \n" + message.content)
-    .setTimestamp();
 
-    const channel = message.guild.channels.cache.find(x=>x.id === settings.channel) as TextBasedChannel;
+    const channel = message.guild.channels.cache.find(
+      (x) => x.id === settings.channel
+    ) as TextBasedChannel;
+
     if (!channel) return null;
+    const content =
+      message.content ?? "*Could not load message content.*";
+    
+    const em = new InfoEmbed(client, message)
+      .setDescription(
+        "A message was deleted in " +
+          message.channel.toString() +
+          "\n\nContent: \n" +
+          content
+      )
+      .setColor("RED")
+      .setTimestamp();
 
-
-    return await channel.send({embeds: [em]});
+    return channel.send({ embeds: [em] }).catch((err) => handled(client, err));;
   },
 } as EventType;

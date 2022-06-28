@@ -9,6 +9,9 @@ export class Settings {
   @Property()
   guildId: string;
 
+  @Property({ onCreate: () => true })
+  active: boolean;
+
   @Property()
   prefix: string;
 

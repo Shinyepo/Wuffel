@@ -4,7 +4,7 @@ import { WuffelClient } from "Wuffel/types";
 import { Settings } from "../Entities/Settings";
 
 export const createSettings = async (em: EntityManager, guild: Guild) => {
-  const newEntry = await em.create(Settings, {
+  const newEntry = await em.fork().create(Settings, {
     guildId: guild.id,
     prefix: "+",
     userCount: guild.memberCount.toString(),
@@ -14,16 +14,17 @@ export const createSettings = async (em: EntityManager, guild: Guild) => {
 };
 
 export const getSettings = async (em: EntityManager, guild: Guild,) => {
-  var settings = await em.findOne(Settings, { guildId: guild.id });
-  if (!settings) settings = await createSettings(em.fork(), guild);
+  var settings = await em.fork().findOne(Settings, { guildId: guild.id });
+  if (!settings) settings = await createSettings(em, guild);
   return settings;
 };
 
-export const removeSettings = async (em: EntityManager, guild: Guild) => {
+export const deactivateSettings = async (em: EntityManager, guild: Guild) => {
   const context = em.fork();
   const settings = await context.findOne(Settings, { guildId: guild.id });
   if (!settings) return;
-  await context.removeAndFlush(settings);
+  settings.active = false;
+  await em.flush();
   return;
 };
 
