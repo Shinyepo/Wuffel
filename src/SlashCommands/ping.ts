@@ -8,6 +8,9 @@ export = {
   async execute(_, interaction) {
     const latency = interaction.client.ws.ping;
 
-    await interaction.reply("API Latency is " + latency + "ms 🏓");
+    await interaction.reply({
+      content: "API Latency is " + latency + "ms 🏓",
+      ephemeral: true,
+    });
   },
 } as SlashCommandType;
