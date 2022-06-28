@@ -1,56 +1,116 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { ChannelType } from "discord-api-types/v10";
+import {
+  MessageActionRow,
+  MessageButton,
+  MessageSelectMenu,
+} from "discord.js";
 import { SlashCommandType } from "../../types";
 import { setLogChannel } from "../Services/LogsService";
+import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   data: new SlashCommandBuilder()
     .setName("configurelogs")
     .setDescription("Configure channel for logs.")
     .setDefaultMemberPermissions(0)
-    .addStringOption((x) =>
-      x
-        .setName("event")
-        .setDescription("Choose event")
-        .setRequired(true)
-        .addChoices(
-          {
-            name: "Message Delete",
-            value: "messageDelete",
-          },
-          {
-            name: "Message Edit",
-            value: "messageEdit",
-          }
-        )
-    )
-    .addChannelOption((x) =>
-      x
-        .setName("channel")
-        .setDescription("Choose channel for logs.")
-        .setRequired(true)
-        .addChannelTypes(ChannelType.GuildText)
-    )
     .setDMPermission(false),
   async execute(client, interaction) {
-    const channel = interaction.options.getChannel("channel");
-    const event = interaction.options.getString("event");
+    const embed = new InfoEmbed(client)
+      .setTitle("Event Configurator")
+      .setDescription(
+        "Please select a event and desired channel from the lists below."
+      );
+    const channelMenu = new MessageSelectMenu()
+      .setCustomId("channel")
+      .setPlaceholder("Select Channel");
 
-    const result = await setLogChannel(
-      client.em,
-      interaction.guild!.id,
-      event!,
-      channel!.id
-    );
-
-    if (result) {
-      return await interaction.reply({
-        content: `Successfully changed settings for the event`,
-        ephemeral: true,
-      });
+    for (const channel of interaction.guild!.channels.cache.values()) {
+      if (channel.type === "GUILD_TEXT") {
+        channelMenu.addOptions([
+          {
+            label: "#" + channel.name,
+            value: channel.id,
+          },
+        ]);
+      }
     }
+
+    const eventComp = new MessageActionRow().addComponents(
+      new MessageSelectMenu()
+        .setCustomId("event")
+        .setPlaceholder("Select Event")
+        .addOptions({
+          label: "Message Delete",
+          value: "messageDelete",
+        })
+    );
+    const channelComp = new MessageActionRow().addComponents(channelMenu);
+    const saveComp = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("save")
+        .setLabel("Save")
+        .setStyle("SUCCESS")
+    );
+    let data = {
+      event: "",
+      channel: "",
+    };
+
+    const selectCollector =
+      interaction.channel!.createMessageComponentCollector({
+        componentType: "SELECT_MENU",
+        time: 30000,
+      });
+    const buttonCollector =
+      interaction.channel!.createMessageComponentCollector({
+        componentType: "BUTTON",
+        time: 30000,
+      });
+
+    selectCollector.on("collect", async (i) => {
+      await i.deferUpdate();
+      if (i.user.id === interaction.user.id) {
+        if (i.customId === "channel") {
+          data.channel = i.values[0];
+        } else if (i.customId === "event") {
+          data.event = i.values[0];
+        }
+      }
+    });
+
+    buttonCollector.on("collect", async (i) => {
+      if (i.user.id === interaction.user.id) {
+        if (data.channel !== "" && data.event !== "") {
+          const result = await setLogChannel(
+            client.em,
+            interaction.guild!.id,
+            data.event!,
+            data.channel
+          );
+          if (result) {
+            return await i.update({
+              content: `Successfully changed settings for the event`,
+              embeds: [],
+              components: []
+            });
+          }
+          return await i.update({
+            content:
+              "Something went wrong while setting channel for the event.",
+              embeds: [],
+              components: []
+          });
+        } else {
+          await i.update({
+            content: "**Please select Event and Channel.**",
+          });
+        }
+      }
+    });
+
     return await interaction.reply({
-      content: "Something went wrong while setting channel for the event.",
+      embeds: [embed],
+      components: [eventComp, channelComp, saveComp],
       ephemeral: true,
     });
   },
