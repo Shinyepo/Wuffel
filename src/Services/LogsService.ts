@@ -6,7 +6,7 @@ import { LogSettings } from "../Entities/LogSettings";
 export const getLogSettings = async (
   em: EntityManager,
   guild: Guild,
-  event: string
+  event: "messageEvents" | "channelEvents" | "userEvents" | "voicePresenceEvents" | "guildEvents"
 ) => {
   const context = em.fork();
   const data = await context.findOne(LogSettings, { guildId: guild.id });

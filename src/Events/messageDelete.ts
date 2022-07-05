@@ -12,7 +12,7 @@ export = {
     const settings = await getLogSettings(
       client.em,
       message.guild,
-      "messageDelete"
+      "messageEvents"
     );
 
     if (!settings || !settings.on || !settings.channel) return null;

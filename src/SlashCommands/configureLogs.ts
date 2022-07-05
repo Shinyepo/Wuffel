@@ -1,9 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import {
-  MessageActionRow,
-  MessageButton,
-  MessageSelectMenu,
-} from "discord.js";
+import { MessageActionRow, MessageButton, MessageSelectMenu } from "discord.js";
 import { SlashCommandType } from "../../types";
 import { setLogChannel } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -18,7 +14,8 @@ export = {
     const embed = new InfoEmbed(client)
       .setTitle("Event Configurator")
       .setDescription(
-        "Please select a event and desired channel from the lists below."
+        "Please select a event and desired channel from the lists below.\n\n\
+        **If you want more detailed configuration please visit the [dashboard](https://www.wuffel.dev/)**"
       );
     const channelMenu = new MessageSelectMenu()
       .setCustomId("channel")
@@ -39,10 +36,16 @@ export = {
       new MessageSelectMenu()
         .setCustomId("event")
         .setPlaceholder("Select Event")
-        .addOptions({
-          label: "Message Delete",
-          value: "messageDelete",
-        })
+        .addOptions(
+          {
+            label: "Message Events",
+            value: "messageEvents",
+          },
+          { label: "Channel Events", value: "channelEvents" },
+          { label: "User Events", value: "userEvents" },
+          { label: "Voice Presence Events", value: "voicePresenceEvents" },
+          { label: "Guild(Server) Events", value: "guildEvents" }
+        )
     );
     const channelComp = new MessageActionRow().addComponents(channelMenu);
     const saveComp = new MessageActionRow().addComponents(
@@ -91,18 +94,20 @@ export = {
             return await i.update({
               content: `Successfully changed settings for the event`,
               embeds: [],
-              components: []
+              components: [],
             });
           }
           return await i.update({
             content:
               "Something went wrong while setting channel for the event.",
-              embeds: [],
-              components: []
+            embeds: [],
+            components: [],
           });
         } else {
+          data.channel = "";
+          data.event = "";
           await i.update({
-            content: "**Please select Event and Channel.**",
+            content: "**---->  Please select Event and Channel.  <----**",
           });
         }
       }

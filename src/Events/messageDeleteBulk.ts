@@ -1,5 +1,6 @@
 import { Collection, Message, Snowflake, TextChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
+import { getLogSettings } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
 import { handled } from "../Utilities/scuffedEH";
 
@@ -10,6 +11,13 @@ export = {
     client: WuffelClient,
     messages: Collection<Snowflake, Message>
   ) {
+    const settings = await getLogSettings(
+      client.em,
+      messages.first()!.guild!,
+      "messageEvents"
+    );
+
+    if (!settings || !settings.on || !settings.channel) return null;
     const guild = messages.first()?.guild;
     const channel = guild?.channels.cache.find(
       (x) => x.id === "985163154092855308"
