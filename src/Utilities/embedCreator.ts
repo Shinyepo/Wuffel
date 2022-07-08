@@ -15,7 +15,7 @@ export class InfoEmbed extends MessageEmbed {
         iconURL: message.author.avatarURL() ?? undefined,
       };
     this.setAuthor(author);
-    this.setColor("#B1FFFD");
+    this.setColor("#f9cf93");
   }
 }
 

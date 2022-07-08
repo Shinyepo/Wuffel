@@ -1,4 +1,3 @@
-import { ChannelType } from "discord-api-types/v9";
 import { GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";

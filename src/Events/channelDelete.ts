@@ -1,4 +1,3 @@
-import { ChannelType } from "discord-api-types/v9";
 import { GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
@@ -20,7 +19,7 @@ export = {
 
     const embed = new InfoEmbed(client)
       .setTitle("A Channel was deleted.")
-      .addField("Channel", channel.toString(), true)
+      .addField("Channel", channel.name, true)
       .addField("Type", chType, true)
       .addField("Category", channel.parent?.name ?? "-", true)
       .setColor("RED")
