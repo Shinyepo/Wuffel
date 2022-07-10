@@ -44,7 +44,8 @@ export = {
           { label: "Channel Events", value: "channelEvents" },
           { label: "User Events", value: "userEvents" },
           { label: "Voice Presence Events", value: "voicePresenceEvents" },
-          { label: "Guild(Server) Events", value: "guildEvents" }
+          { label: "Guild(Server) Events", value: "guildEvents" },
+          { label: "Emoji Events", value: "emojiEvents" }
         )
     );
     const channelComp = new MessageActionRow().addComponents(channelMenu);
