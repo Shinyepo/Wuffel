@@ -1,10 +1,10 @@
 import {
   GuildChannel,
-  PermissionOverwriteManager,
   TextBasedChannel,
 } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
+import {  permDiff } from "../Utilities/arrayDifference";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 const keyArray: { [key: string]: string } = {
@@ -18,7 +18,7 @@ const keyArray: { [key: string]: string } = {
   bitrate: "Bitrate",
   videoQualityMode: "Video Quality",
   parentId: "Old Category",
-  rawPosition: "Order"
+  rawPosition: "Order",
 };
 
 const archiveTime: { [key: number]: string } = {
@@ -88,8 +88,8 @@ export = {
         let parsedValue = "";
 
         if (key === "rawPosition") {
-          parsedValue = "Changed order of the channels in the category."
-        };
+          parsedValue = "Changed order of the channels in the category.";
+        }
         if (key === "permissionOverwrites") continue;
 
         if (key === "defaultAutoArchiveDuration") {
@@ -121,7 +121,10 @@ export = {
               : value;
         }
         if (key === "parentId") {
-          parsedValue = oldChannel.parent?.name === undefined ? "-" : oldChannel.parent.name;
+          parsedValue =
+            oldChannel.parent?.name === undefined
+              ? "-"
+              : oldChannel.parent.name;
         }
         embed.addField(
           keyArray[key],
@@ -139,6 +142,12 @@ export = {
         );
       }
     }
+    const res = permDiff(
+      oldChannel.permissionOverwrites.cache,
+      newChannel.permissionOverwrites.cache
+    );
+
+    if (res.size > 0) embed.addField("Permissions", "Permission change.", true);
 
     const logChannel = oldChannel.guild.channels.cache.find(
       (x) => x.id === settings.channel

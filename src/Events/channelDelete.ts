@@ -19,8 +19,8 @@ export = {
 
     const embed = new InfoEmbed(client)
       .setTitle("A Channel was deleted.")
-      .addField("Channel", channel.name, true)
       .addField("Type", chType, true)
+      .addField("Channel", channel.name, true)
       .addField("Category", channel.parent?.name ?? "-", true)
       .setColor("RED")
 

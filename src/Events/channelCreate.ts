@@ -19,8 +19,8 @@ export = {
 
     const embed = new InfoEmbed(client)
       .setTitle("A new Channel was created.")
-      .addField("Channel", channel.toString(), true)
       .addField("Type", chType, true)
+      .addField("Channel", channel.toString(), true)
       .addField("Category", channel.parent?.name ?? "-", true);
 
     const logChannel = channel.guild.channels.cache.find(
