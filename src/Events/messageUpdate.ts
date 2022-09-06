@@ -13,6 +13,7 @@ export = {
     newMessage: Message
   ) {
     if (oldMessage.author?.bot || !oldMessage.guild) return null;
+    if (oldMessage.content === newMessage.content) return null;
     const settings = await getLogSettings(
       client.em,
       oldMessage.guild,

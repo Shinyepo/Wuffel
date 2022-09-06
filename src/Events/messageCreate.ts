@@ -8,7 +8,7 @@ export = {
 
   async execute(client: WuffelClient, message: Message) {
     if (message.author.bot) return;
-    const settings = await getSettings(client.em, message.guild!);
+    const settings = await getSettings(client.em.fork(), message.guild!);
 
     const prefix = settings?.prefix ?? "+";
     const split = message.content.trim().split(/ +/g);

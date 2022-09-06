@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { MessageActionRow, MessageButton, MessageSelectMenu } from "discord.js";
+import nanoid from "nanoid";
 import { SlashCommandType } from "../../types";
 import { setLogChannel } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -17,8 +18,13 @@ export = {
         "Please select a event and desired channel from the lists below.\n\n\
         **If you want more detailed configuration please visit the [dashboard](https://www.wuffel.dev/)**"
       );
+    const channelId = "channel-" + nanoid();
+    const eventId = "event-" + nanoid();
+    const saveId = "save-" + nanoid();
+    console.log({ channelId, eventId, saveId });
+
     const channelMenu = new MessageSelectMenu()
-      .setCustomId("channel")
+      .setCustomId(channelId)
       .setPlaceholder("Select Channel");
 
     for (const channel of interaction.guild!.channels.cache.values()) {
@@ -34,7 +40,7 @@ export = {
 
     const eventComp = new MessageActionRow().addComponents(
       new MessageSelectMenu()
-        .setCustomId("event")
+        .setCustomId(eventId)
         .setPlaceholder("Select Event")
         .addOptions(
           {
@@ -51,7 +57,7 @@ export = {
     const channelComp = new MessageActionRow().addComponents(channelMenu);
     const saveComp = new MessageActionRow().addComponents(
       new MessageButton()
-        .setCustomId("save")
+        .setCustomId(saveId)
         .setLabel("Save")
         .setStyle("SUCCESS")
     );
@@ -60,23 +66,34 @@ export = {
       channel: "",
     };
 
+    const filterSave = (i) =>
+      i.customId === saveId && i.user.id === interaction.user.id;
+    const filterEvent = (i) =>
+      (i.customId === eventId || i.customId === channelId) && i.user.id === interaction.member?.user.id;
+
     const selectCollector =
       interaction.channel!.createMessageComponentCollector({
         componentType: "SELECT_MENU",
         time: 30000,
+        filter: filterEvent,
       });
     const buttonCollector =
       interaction.channel!.createMessageComponentCollector({
         componentType: "BUTTON",
         time: 30000,
+        filter: filterSave,
       });
 
     selectCollector.on("collect", async (i) => {
-      await i.deferUpdate();
+      await i
+        .deferUpdate({ fetchReply: false })
+        .catch((err) => console.log(err));
+      console.log(i.customId);
+      
       if (i.user.id === interaction.user.id) {
-        if (i.customId === "channel") {
+        if (i.customId === channelId) {
           data.channel = i.values[0];
-        } else if (i.customId === "event") {
+        } else if (i.customId === eventId) {
           data.event = i.values[0];
         }
       }
