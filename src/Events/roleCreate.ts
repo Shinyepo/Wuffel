@@ -1,6 +1,7 @@
 import { Role, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
+import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
@@ -24,12 +25,11 @@ export = {
       .setColor(role.color)
       .addField("Name", role.name, true);
 
-    const auditRole = (await role.guild.fetchAuditLogs({limit: 1, type: "ROLE_CREATE"})).entries.first();
-
-    if (auditRole) {
-        const { executor } = auditRole;
-        embed.addField("Creator", executor!.toString(), true);
-    }
+      const audit = await fetchAudit(role.guild, "ROLE_CREATE");
+      if (audit?.executor && audit.target) {
+        if ((audit?.target as Role).id === role.id)
+          embed.addField("Created by", audit!.executor!.toString());
+      }
 
     return logChannel.send({ embeds: [embed] });
   },

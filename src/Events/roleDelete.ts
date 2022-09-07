@@ -1,6 +1,7 @@
 import { Role, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
+import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
@@ -25,12 +26,11 @@ export = {
       .addField("Name", role.name, true)
       .addField("Members", role.members.size.toString(), true);
 
-    const auditRole = (await role.guild.fetchAuditLogs({limit: 1, type: "ROLE_DELETE"})).entries.first();
-
-    if (auditRole) {
-        const { executor } = auditRole;
-        embed.addField("Who?", executor!.toString(), true);
-    }
+      const audit = await fetchAudit(role.guild, "ROLE_DELETE");
+      if (audit?.executor && audit.target) {
+        if ((audit?.target as Role).id === role.id)
+          embed.addField("Deleted by", audit!.executor!.toString());
+      }
 
     return logChannel.send({ embeds: [embed] });
   },

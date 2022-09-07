@@ -1,8 +1,8 @@
-import { Message, TextBasedChannel } from "discord.js";
+import { Message, TextBasedChannel, User } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
+import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
-import { handled } from "../Utilities/scuffedEH";
 
 export = {
   name: "messageDelete",
@@ -35,15 +35,10 @@ export = {
       .setColor("RED")
       .setTimestamp();
 
-      const deleteAudit = await (
-        await message.guild.fetchAuditLogs({ type: "MESSAGE_DELETE", limit: 1 })
-      ).entries.first();
-  
-      if (!deleteAudit) console.log("No audit found");
-      else {
-        const { executor, target } = deleteAudit!;
-        if (target?.id === message.author.id)
-          em.addField("Executor", executor!.toString());
+      const audit = await fetchAudit(message.guild, "MESSAGE_DELETE");
+      if (audit?.executor && audit.target) {
+        if ((audit?.target as User).id === message.author.id)
+          em.addField("Deleted by", audit!.executor!.toString());
       }
 
     return channel.send({ embeds: [em] });

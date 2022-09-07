@@ -1,6 +1,7 @@
 import { Guild, Invite, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
+import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
@@ -23,13 +24,12 @@ export = {
       .addField("Link", invite.toString(), true)
       .addField("Target channel", invite.channel.toString(), true);
 
-    const auditInvite = await (await guild.fetchAuditLogs({limit: 1, type: "INVITE_DELETE"})).entries.first();
+      const audit = await fetchAudit(guild, "INVITE_DELETE");
+      if (audit?.executor && audit.target) {
+        if ((audit?.target as Invite).code === invite.code)
+          embed.addField("Deleted by", audit!.executor!.toString());
+      }
 
-    if (auditInvite) {
-        const { executor } = auditInvite;
-        embed.addField("Deleted by", executor!.toString());
-    }
-
-    await logChannel.send({ embeds: [embed] });
+    return await logChannel.send({ embeds: [embed] });
   },
 } as EventType;

@@ -1,6 +1,7 @@
-import { GuildBan, TextBasedChannel } from "discord.js";
+import { GuildBan, TextBasedChannel, User } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
+import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
@@ -25,17 +26,11 @@ export = {
       )
       .addField("User", user.toString(), true);
 
-    const banAudit = await (
-      await guild.fetchAuditLogs({ type: "MEMBER_BAN_REMOVE", limit: 1 })
-    ).entries.first();
-    console.log("ban?" + banAudit);
-    
-
-    if (!banAudit) console.log("No audit found");
-    else {
-      const { executor, target } = banAudit!;
-      if (target?.id === user.id) embed.addField("Executor", executor!.toString())
-    }
+      const audit = await fetchAudit(guild, "MEMBER_BAN_REMOVE");
+      if (audit?.executor && audit.target) {
+        if ((audit?.target as User).id === user.id)
+          embed.addField("Deleted by", audit!.executor!.toString());
+      }
     
     embed.addField("Reason", reason ? reason : "*not specified*");
 
