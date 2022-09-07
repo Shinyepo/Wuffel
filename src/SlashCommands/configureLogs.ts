@@ -21,7 +21,6 @@ export = {
     const channelId = "channel-" + nanoid();
     const eventId = "event-" + nanoid();
     const saveId = "save-" + nanoid();
-    console.log({ channelId, eventId, saveId });
 
     const channelMenu = new MessageSelectMenu()
       .setCustomId(channelId)
@@ -88,7 +87,6 @@ export = {
       await i
         .deferUpdate({ fetchReply: false })
         .catch((err) => console.log(err));
-      console.log(i.customId);
       
       if (i.user.id === interaction.user.id) {
         if (i.customId === channelId) {

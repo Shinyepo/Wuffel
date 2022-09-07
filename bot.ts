@@ -19,7 +19,9 @@ const main = async () => {
       "GUILD_VOICE_STATES",
       "GUILD_PRESENCES",
       "GUILD_MEMBERS",
-      "GUILD_EMOJIS_AND_STICKERS"
+      "GUILD_EMOJIS_AND_STICKERS",
+      "GUILD_BANS",
+      "GUILD_INVITES"
     ],
   }) as WuffelClient;
 

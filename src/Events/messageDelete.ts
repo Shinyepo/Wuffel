@@ -35,6 +35,17 @@ export = {
       .setColor("RED")
       .setTimestamp();
 
-    return channel.send({ embeds: [em] }).catch((err) => handled(client, err));;
+      const deleteAudit = await (
+        await message.guild.fetchAuditLogs({ type: "MESSAGE_DELETE", limit: 1 })
+      ).entries.first();
+  
+      if (!deleteAudit) console.log("No audit found");
+      else {
+        const { executor, target } = deleteAudit!;
+        if (target?.id === message.author.id)
+          em.addField("Executor", executor!.toString());
+      }
+
+    return channel.send({ embeds: [em] });
   },
 } as EventType;

@@ -1,10 +1,7 @@
-import {
-  GuildChannel,
-  TextBasedChannel,
-} from "discord.js";
+import { GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
-import {  permDiff } from "../Utilities/arrayDifference";
+import { permDiff } from "../Utilities/arrayDifference";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 const keyArray: { [key: string]: string } = {
@@ -65,6 +62,10 @@ export = {
     );
 
     if (!settings || !settings.on || !settings.channel) return null;
+    const logChannel = oldChannel.guild.channels.cache.find(
+      (x) => x.id === settings.channel
+    ) as TextBasedChannel;
+    if (!logChannel) return;
 
     const chType =
       oldChannel.type === "GUILD_STAGE_VOICE"
@@ -81,7 +82,7 @@ export = {
       .addField("Channel", newChannel.toString(), true)
       .addField("Category", newChannel.parent?.name ?? "-", true);
 
-    for (const [key, value] of Object.entries(oldChannel)) {
+    for (let [key, value] of Object.entries(oldChannel)) {
       const newValue = (newChannel as any)[key];
 
       if (value !== newValue) {
@@ -112,9 +113,15 @@ export = {
             "**";
         }
         if (key === "rateLimitPerUser") {
-          parsedValue = slowmode[value] + " -> **" + slowmode[newValue] + "**";
+          parsedValue =
+            (slowmode[value] === undefined ? "off" : slowmode[value]) +
+            " -> **" +
+            (slowmode[newValue] === undefined ? "off" : slowmode[newValue]) +
+            "**";
         }
         if (key === "name" || key === "topic") {
+          if (value === undefined || value === null) value = "*not set*";
+
           parsedValue =
             (value as string).length > 100
               ? (value as string).substring(0, 99) + "..."
@@ -149,10 +156,7 @@ export = {
 
     if (res.size > 0) embed.addField("Permissions", "Permission change.", true);
 
-    const logChannel = oldChannel.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-
     return logChannel.send({ embeds: [embed] });
   },
 } as EventType;
+

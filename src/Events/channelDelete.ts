@@ -14,19 +14,26 @@ export = {
     );
 
     if (!settings || !settings.on || !settings.channel) return null;
-
-    const chType = channel.type === "GUILD_STAGE_VOICE" ? "🏟️" : channel.type === "GUILD_CATEGORY" ? "🔖" : channel.type === "GUILD_VOICE" ? "🔊" : "🗒️"
+    const logChannel = channel.guild.channels.cache.find(
+      (x) => x.id === settings.channel
+    ) as TextBasedChannel;
+    if (!logChannel) return;
+    
+    const chType =
+      channel.type === "GUILD_STAGE_VOICE"
+        ? "🏟️"
+        : channel.type === "GUILD_CATEGORY"
+        ? "🔖"
+        : channel.type === "GUILD_VOICE"
+        ? "🔊"
+        : "🗒️";
 
     const embed = new InfoEmbed(client)
       .setTitle("A Channel was deleted.")
       .addField("Type", chType, true)
       .addField("Channel", channel.name, true)
       .addField("Category", channel.parent?.name ?? "-", true)
-      .setColor("RED")
-
-    const logChannel = channel.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
+      .setColor("RED");
 
     return logChannel.send({ embeds: [embed] });
   },
