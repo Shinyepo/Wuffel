@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { EntityManager } from "@mikro-orm/knex";
+import { EntityManager } from "@mikro-orm/postgresql";
 import { Client, Collection, CommandInteraction, Message } from "discord.js";
 
 export type SlashCommandType = {

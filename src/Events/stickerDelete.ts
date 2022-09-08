@@ -24,12 +24,14 @@ import { fetchAudit } from "../Utilities/auditFetcher";
       ) as TextBasedChannel;
   
       if (!channel) return null;
+
+      const desc = sticker.description === "" || sticker.description === null ? "*not set*" : sticker.description;
       
       const embed = new InfoEmbed(client)
         .setTitle("A sticker was deleted")
         .setColor("RED")
         .addField("Name", sticker.name!, true)
-        .addField("Description", sticker.description!, true)
+        .addField("Description", desc, true)
 
     if (sticker.tags) {
         embed.addField("Related emoji", ":"+sticker.tags[0] +":",true);

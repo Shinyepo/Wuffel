@@ -14,7 +14,7 @@ export = {
   async execute(client, oldEmoji: GuildEmoji, newEmoji: GuildEmoji) {
     const settings = await getLogSettings(
       client.em,
-      oldEmoji.guild,
+      newEmoji.guild,
       "emojiEvents"
     );
 
