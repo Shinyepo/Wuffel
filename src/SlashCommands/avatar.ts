@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageActionRow, MessageButton } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { SlashCommandType } from "Wuffel/types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
@@ -22,9 +22,9 @@ export = {
     );
 
     const avatar =
-      member!.displayAvatarURL({ dynamic: true }) !== null
-        ? member?.displayAvatarURL({ dynamic: true })
-        : user.displayAvatarURL({ dynamic: true }) ?? user.defaultAvatarURL;
+      member!.displayAvatarURL({ forceStatic: false }) !== null
+        ? member?.displayAvatarURL({ forceStatic: false })
+        : user.displayAvatarURL({ forceStatic: false }) ?? user.defaultAvatarURL;
 
     const embed = new InfoEmbed(client)
       .setTitle((member?.nickname ?? user.username) + "'s avatar")
@@ -32,18 +32,18 @@ export = {
 
     const cutLink = avatar?.replace(".webp", "").replace(".gif", "");
 
-    const comp = new MessageActionRow().addComponents(
-      new MessageButton()
+    const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
         .setLabel("PNG")
-        .setStyle("LINK")
+        .setStyle(ButtonStyle.Link)
         .setURL(cutLink + ".png"),
-      new MessageButton()
+      new ButtonBuilder()
         .setLabel("JPG")
-        .setStyle("LINK")
+        .setStyle(ButtonStyle.Link)
         .setURL(cutLink + ".jpg"),
-      new MessageButton()
+      new ButtonBuilder()
         .setLabel("GIF")
-        .setStyle("LINK")
+        .setStyle(ButtonStyle.Link)
         .setURL(cutLink + ".gif")
     );
 

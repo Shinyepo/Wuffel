@@ -27,7 +27,7 @@ export = {
     const embed = new InfoEmbed(client)
       .setTitle("Deleted a total of " + messages.size + " messages\n")
       .setDescription(messages.first()!.channel.toString())
-      .setColor("RED")
+      .setColor("Red")
       .setTimestamp();
     let i = 1;
     for (const [_, message] of messages) {
@@ -46,7 +46,7 @@ export = {
         i++;
         continue;
       }
-      embed.description += "\n\n#"+ i + " " + content;
+      embed.data.description += "\n\n#"+ i + " " + content;
       i++;
     }
 

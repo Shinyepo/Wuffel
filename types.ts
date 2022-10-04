@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { Client, Collection, CommandInteraction, Message } from "discord.js";
+import { ChatInputCommandInteraction, Client, Collection, Message } from "discord.js";
 
 export type SlashCommandType = {
   data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
   permissionLevel?: "all" | "guildMember" | "mod" | "admin" | "owner";
-  execute: (client: WuffelClient, interaction: CommandInteraction) => void;
+  execute: (client: WuffelClient, interaction: ChatInputCommandInteraction) => void;
 };
 export type CommandType = {
   data: {

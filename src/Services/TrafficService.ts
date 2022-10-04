@@ -12,7 +12,7 @@ export const addTraffic = async (
     guildId: guild.id,
     userId: user.id,
     username: user.username,
-    nickname,
+    nickname: nickname ?? undefined,
     joined,
   });
 

@@ -17,26 +17,26 @@
   "author": "Shiny",
   "license": "ISC",
   "dependencies": {
-    "@babel/helper-compilation-targets": "^7.18.9",
+    "@babel/helper-compilation-targets": "^7.19.3",
     "@discordjs/builders": "^1.2.0",
-    "@discordjs/rest": "^1.1.0",
-    "@mikro-orm/cli": "^5.4.0",
-    "@mikro-orm/core": "^5.4.0",
-    "@mikro-orm/postgresql": "^5.4.0",
-    "discord-api-types": "^0.37.5",
-    "discord.js": "^14.3.0",
+    "@discordjs/rest": "^1.2.0",
+    "@mikro-orm/cli": "^5.4.2",
+    "@mikro-orm/core": "^5.4.2",
+    "@mikro-orm/postgresql": "^5.4.2",
+    "discord-api-types": "^0.37.11",
+    "discord.js": "^14.5.0",
     "dotenv-safe": "^8.2.0",
     "format-duration": "^2.0.0",
     "moment": "^2.29.4",
-    "nanoid": "4.0.0",
+    "nanoid": "3.3.4",
     "pg": "^8.8.0",
     "pretty-ms": "^8.0.0",
     "statman-stopwatch": "^2.13.0",
-    "typescript": "^4.8.2"
+    "typescript": "^4.8.4"
   },
   "devDependencies": {
-    "@types/nanoid": "^2.1.0",
-    "nodemon": "^2.0.19"
+    "@types/nanoid": "^3.0.0",
+    "nodemon": "^2.0.20"
   },
   "mikro-orm": {
     "useTsNode": true,

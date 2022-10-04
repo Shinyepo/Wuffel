@@ -29,9 +29,7 @@ export = {
     .setDMPermission(false),
   async execute(_, interaction) {
     const count = interaction.options.getInteger("count");
-    let channel = interaction.options.getChannel(
-      "channel"
-    ) as GuildTextBasedChannel;
+    let channel = interaction.options.getChannel("channel") as GuildTextBasedChannel;
     const user = interaction.options.getUser("target");
 
     if (!channel) channel = interaction.channel! as GuildTextBasedChannel;
@@ -96,7 +94,7 @@ export = {
 
     const done = await channel.bulkDelete(count!);
 
-    await interaction.reply({
+    return await interaction.reply({
       content: "Deleted a total of " + done.size,
       ephemeral: true,
     });

@@ -1,4 +1,4 @@
-import { GuildChannel, TextBasedChannel } from "discord.js";
+import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
 import { permDiff } from "../Utilities/arrayDifference";
@@ -68,19 +68,25 @@ export = {
     if (!logChannel) return;
 
     const chType =
-      oldChannel.type === "GUILD_STAGE_VOICE"
+      oldChannel.type === ChannelType.GuildStageVoice
         ? "🏟️"
-        : oldChannel.type === "GUILD_CATEGORY"
+        : oldChannel.type === ChannelType.GuildCategory
         ? "🔖"
-        : oldChannel.type === "GUILD_VOICE"
+        : oldChannel.type === ChannelType.GuildVoice
         ? "🔊"
         : "🗒️";
 
     const embed = new InfoEmbed(client)
       .setTitle("A Channel was Updated.")
-      .addField("Type", chType, true)
-      .addField("Channel", newChannel.toString(), true)
-      .addField("Category", newChannel.parent?.name ?? "-", true);
+      .addFields(
+        { name: "Type", value: chType, inline: true },
+        { name: "Channel", value: newChannel.toString(), inline: true },
+        {
+          name: "Category",
+          value: newChannel.parent?.name ?? "-",
+          inline: true,
+        }
+      );
 
     for (let [key, value] of Object.entries(oldChannel)) {
       const newValue = (newChannel as any)[key];
@@ -133,20 +139,21 @@ export = {
               ? "-"
               : oldChannel.parent.name;
         }
-        embed.addField(
-          keyArray[key],
-          parsedValue === ""
-            ? ((value as string).length > 100
-                ? (value as string).substring(0, 99) + "..."
-                : value) +
+        embed.addFields({
+          name: keyArray[key],
+          value:
+            parsedValue === ""
+              ? ((value as string).length > 100
+                  ? (value as string).substring(0, 99) + "..."
+                  : value) +
                 " -> **" +
                 ((newValue as string).length > 100
                   ? (newValue as string).substring(0, 99) + "..."
                   : newValue) +
                 "**"
-            : parsedValue,
-          true
-        );
+              : parsedValue,
+          inline: true,
+        });
       }
     }
     const res = permDiff(
@@ -154,9 +161,13 @@ export = {
       newChannel.permissionOverwrites.cache
     );
 
-    if (res.size > 0) embed.addField("Permissions", "Permission change.", true);
+    if (res.size > 0)
+      embed.addFields({
+        name: "Permissions",
+        value: "Permission change.",
+        inline: true,
+      });
 
     return logChannel.send({ embeds: [embed] });
   },
 } as EventType;
-

@@ -1,7 +1,8 @@
 import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
   GuildEmoji,
-  MessageActionRow,
-  MessageButton,
   TextBasedChannel,
 } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
@@ -30,15 +31,15 @@ export = {
     const embed = new InfoEmbed(client)
       .setTitle("A new emoji has been added")
       .setThumbnail(emoji.url)
-      .addField("Name", emoji.name!, true)
-      .addField("Uploader", author.toString(), true)
-      .addField("Is animated?", emoji.animated! + "", true)
+      .addFields({name: "Name",value: emoji.name!,inline: true},
+      {name: "Uploader",value: author.toString(),inline: true},
+      {name: "Is animated?",value: emoji.animated! + "",inline: true})
 
-    const comp = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setStyle("LINK")
+    const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Link)
         .setURL(emoji.url)
-        .setEmoji(emoji)
+        .setEmoji(emoji.toString())
         .setLabel("Open in Browser")
     );
 

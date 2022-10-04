@@ -1,4 +1,4 @@
-import { Guild, Invite, TextBasedChannel } from "discord.js";
+import { AuditLogEvent, Guild, Invite, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
@@ -20,15 +20,21 @@ export = {
 
     const embed = new InfoEmbed(client)
       .setTitle("A invite link was deleted")
-      .setColor("RED")
-      .addField("Link", invite.toString(), true)
-      .addField("Target channel", invite.channel.toString(), true);
+      .setColor("Red")
+      .addFields(
+        { name: "Link", value: invite.toString() },
+        { name: "Target channel", value: invite.channel!.toString(), inline: true}
+      );
 
-      const audit = await fetchAudit(guild, "INVITE_DELETE");
-      if (audit?.executor && audit.target) {
-        if ((audit?.target as Invite).code === invite.code)
-          embed.addField("Deleted by", audit!.executor!.toString());
-      }
+    const audit = await fetchAudit(guild, AuditLogEvent.InviteDelete);
+    if (audit?.executor && audit.target) {
+      if ((audit?.target as Invite).code === invite.code)
+        embed.addFields({
+          name: "Deleted by",
+          value: audit!.executor!.toString(),
+          inline: true
+        });
+    }
 
     return await logChannel.send({ embeds: [embed] });
   },

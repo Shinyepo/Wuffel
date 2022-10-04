@@ -1,4 +1,4 @@
-import { Role, TextBasedChannel } from "discord.js";
+import { AuditLogEvent, Role, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
@@ -23,36 +23,47 @@ export = {
     const embed = new InfoEmbed(client)
       .setTitle("A Role was updated.")
       .setColor(newRole.color)
-      .addField("Members", newRole.members.size.toString(), true);
+      .addFields({ name: "Members", value: newRole.members.size.toString() });
 
     let changeCount = 0;
 
     if (oldRole.name !== newRole.name) {
-      embed
-        .addField("Old name", oldRole.name, true)
-        .addField("New name", newRole.name, true);
+      embed.addFields(
+        { name: "Old name", value: oldRole.name },
+        { name: "New name", value: newRole.name }
+      );
       changeCount++;
     }
     if (oldRole.color !== newRole.color) {
-      embed.addField("Old color", oldRole.hexColor.toString(), true);
+      embed.addFields({
+        name: "Old color",
+        value: oldRole.hexColor.toString(),
+      });
       changeCount++;
     }
     if (oldRole.icon !== newRole.icon) {
-      embed
-        .addField("Old icon", oldRole.icon ?? "*not set*", true)
-        .addField("Old icon", oldRole.icon ?? "*not set*", true);
+      embed.addFields(
+        { name: "Old icon", value: oldRole.icon ?? "*not set*" },
+        { name: "Old icon", value: oldRole.icon ?? "*not set*" }
+      );
       changeCount++;
     }
     if (oldRole.permissions.bitfield !== newRole.permissions.bitfield) {
-      embed.addField("Permission change", "Some permissions were changed.");
+      embed.addFields({
+        name: "Permission change",
+        value: "Some permissions were changed.",
+      });
       changeCount++;
     }
     if (changeCount < 1) return;
 
-    const audit = await fetchAudit(newRole.guild, "ROLE_UPDATE");
+    const audit = await fetchAudit(newRole.guild, AuditLogEvent.RoleUpdate);
     if (audit?.executor && audit.target) {
       if ((audit?.target as Role).id === newRole.id)
-        embed.addField("Updated by", audit!.executor!.toString());
+        embed.addFields({
+          name: "Updated by",
+          value: audit!.executor!.toString(),
+        });
     }
 
     return logChannel.send({ embeds: [embed] });

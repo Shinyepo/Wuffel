@@ -1,7 +1,8 @@
 import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
   GuildEmoji,
-  MessageActionRow,
-  MessageButton,
   TextBasedChannel,
 } from "discord.js";
 import { EventType } from "Wuffel/types";
@@ -35,26 +36,26 @@ export = {
     if (oldEmoji.available !== newEmoji.available) {
       embed
         .setTitle("Emoji is no longer available")
-        .addField("Name", newEmoji.name!, true)
-        .setColor("RED");
+        .addFields({name: "Name",value: newEmoji.name!,inline: true})
+        .setColor("Red");
     }
 
     if (oldEmoji.name !== newEmoji.name) {
       embed
-        .addField("Old name", oldName!, true)
-        .addField("New name", newEmoji.name!, true);
+        .addFields({name: "Old name",value: oldName!,inline: true},
+        {name: "New name",value: newEmoji.name!,inline: true});
     }
     const author = await oldEmoji.fetchAuthor();
 
     embed
-      .addField("Uploader", author.toString(), true)
-      .addField("Is animated?", newEmoji.animated! + "", true);
+      .addFields({name: "Uploader",value: author.toString(),inline: true},
+      {name: "Is animated?",value: newEmoji.animated! + "",inline: true});
       
-    const comp = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setStyle("LINK")
+    const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Link)
         .setURL(newEmoji.url)
-        .setEmoji(newEmoji)
+        .setEmoji(newEmoji.toString())
         .setLabel("Open in Browser")
     );
 

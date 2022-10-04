@@ -1,6 +1,6 @@
-import { Client, Collection } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 import { MikroORM } from "@mikro-orm/core";
-import mikroOrmConfig from "./mikro-config"
+import mikroOrmConfig from "./mikro-config";
 import { WuffelClient, SlashCommandType } from "./types";
 import { consoleTimestamp } from "./src/Utilities/timestamp";
 import { loadCommands, loadEvents } from "./src/Utilities/PathLoader";
@@ -11,17 +11,31 @@ const main = async () => {
   const orm = await MikroORM.init<PostgreSqlDriver>(mikroOrmConfig);
 
   const client = new Client({
-    partials: ["MESSAGE", "REACTION", "USER", "GUILD_MEMBER", "CHANNEL"],
+    partials: [
+      Partials.Channel,
+      Partials.GuildMember,
+      Partials.Message,
+      Partials.Reaction,
+      Partials.ThreadMember,
+      Partials.User,
+      Partials.GuildScheduledEvent,
+    ],
     intents: [
-      "DIRECT_MESSAGES",
-      "GUILDS",
-      "GUILD_MESSAGES",
-      "GUILD_VOICE_STATES",
-      "GUILD_PRESENCES",
-      "GUILD_MEMBERS",
-      "GUILD_EMOJIS_AND_STICKERS",
-      "GUILD_BANS",
-      "GUILD_INVITES"
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.GuildBans,
+      GatewayIntentBits.GuildEmojisAndStickers,
+      GatewayIntentBits.GuildIntegrations,
+      GatewayIntentBits.GuildInvites,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildScheduledEvents,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.GuildWebhooks,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.MessageContent,
     ],
   }) as WuffelClient;
 
@@ -38,9 +52,11 @@ const main = async () => {
 
   // Slash command handler
   client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
-    const command = client.commands.get(interaction.commandName) as SlashCommandType;
+    const command = client.commands.get(
+      interaction.commandName
+    ) as SlashCommandType;
 
     if (!command) return;
 

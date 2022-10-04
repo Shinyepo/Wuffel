@@ -1,4 +1,4 @@
-import { GuildChannel, TextBasedChannel } from "discord.js";
+import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -18,22 +18,24 @@ export = {
       (x) => x.id === settings.channel
     ) as TextBasedChannel;
     if (!logChannel) return;
-    
+
     const chType =
-      channel.type === "GUILD_STAGE_VOICE"
+      channel.type === ChannelType.GuildStageVoice
         ? "🏟️"
-        : channel.type === "GUILD_CATEGORY"
+        : channel.type === ChannelType.GuildCategory
         ? "🔖"
-        : channel.type === "GUILD_VOICE"
+        : channel.type === ChannelType.GuildVoice
         ? "🔊"
         : "🗒️";
 
     const embed = new InfoEmbed(client)
       .setTitle("A Channel was deleted.")
-      .addField("Type", chType, true)
-      .addField("Channel", channel.name, true)
-      .addField("Category", channel.parent?.name ?? "-", true)
-      .setColor("RED");
+      .addFields(
+        { name: "Type", value: chType },
+        { name: "Channel", value: channel.name },
+        { name: "Category", value: channel.parent?.name ?? "-" }
+      )
+      .setColor("Red");
 
     return logChannel.send({ embeds: [embed] });
   },

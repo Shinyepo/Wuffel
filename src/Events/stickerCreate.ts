@@ -1,6 +1,8 @@
 import {
-    MessageActionRow,
-    MessageButton,
+  ActionRowBuilder,
+  AuditLogEvent,
+    ButtonBuilder,
+    ButtonStyle,
     Sticker,
     TextBasedChannel,
   } from "discord.js";
@@ -32,23 +34,23 @@ import { fetchAudit } from "../Utilities/auditFetcher";
       const embed = new InfoEmbed(client)
         .setTitle("A new sticker was added")
         .setThumbnail(sticker.url)
-        .addField("Name", sticker.name!, true)
-        .addField("Description", desc , true)
+        .addFields({name: "Name",value: sticker.name!},
+        {name: "Description",value: desc})
 
     if (sticker.tags) {
-        embed.addField("Related emoji", ":"+sticker.tags[0] +":",true);
+        embed.addFields({name: "Related emoji",value: ":"+sticker.tags[0] +":"});
     }
 
-    const audit = await fetchAudit(sticker.guild!, "STICKER_CREATE");
+    const audit = await fetchAudit(sticker.guild!, AuditLogEvent.StickerCreate);
       if (audit?.executor && audit.target) {
         if ((audit?.target as Sticker).id === sticker.id)
-          embed.addField("Created by", audit!.executor!.toString());
+          embed.addFields({name: "Created by",value:  audit!.executor!.toString()});
       }
         
   
-      const comp = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle("LINK")
+      const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Link)
           .setURL(sticker.url)
           .setLabel("Open in Browser")
       );

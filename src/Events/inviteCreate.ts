@@ -19,14 +19,13 @@ export = {
 
     const embed = new InfoEmbed(client)
         .setTitle("New invite link was created")
-        .setColor("AQUA")
-        .addField("Link", invite.toString(), true)
-        .addField("Inviter", invite.inviter!.toString(), true)
-        .addField("Maximum uses", invite.maxUses!.toString(), true)
-        .addField("Target channel", invite.channel.toString(), true)
-        .addField("Expires at", (invite.expiresTimestamp ? new Date(invite.expiresTimestamp).toString() : "Never"));
+        .setColor("Aqua")
+        .addFields({name: "Link",value: invite.toString()},
+        {name: "Inviter",value: invite.inviter!.toString(), inline: true},
+        {name: "Maximum uses",value: invite.maxUses!.toString(), inline: true},
+        {name: "Target channel",value: invite.channel?.toString() ?? "-" , inline: true},
+        {name: "Expires at",value: (invite.expiresTimestamp ? new Date(invite.expiresTimestamp).toString() : "Never")});
 
-    await logChannel.send({embeds: [embed]});
-    
+    return await logChannel.send({embeds: [embed]});
   },
 } as EventType;

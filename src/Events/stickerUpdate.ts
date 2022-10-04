@@ -1,6 +1,8 @@
 import {
-    MessageActionRow,
-    MessageButton,
+  ActionRowBuilder,
+  AuditLogEvent,
+    ButtonBuilder,
+    ButtonStyle,
     Sticker,
     TextBasedChannel,
   } from "discord.js";
@@ -35,43 +37,43 @@ import { fetchAudit } from "../Utilities/auditFetcher";
       if (oldSticker.available !== newSticker.available) {
         embed
           .setTitle("Sticker is no longer available")
-          .addField("Name", newSticker.name!, true)
-          .setColor("RED");
+          .addFields({name: "Name",value: newSticker.name!})
+          .setColor("Red");
           changeCount++;
       }
   
       if (oldSticker.name !== newSticker.name) {
         embed
-          .addField("Old name", oldSticker.name!, true)
-          .addField("New name", newSticker.name!, true);
+          .addFields({name: "Old name", value: oldSticker.name!},
+          {name:"New name",value: newSticker.name!});
           changeCount++;
       }
       if (oldSticker.description !== newSticker.description) {
         const oldDesc = oldSticker.description === "" || oldSticker.description === null ? "*not set*" : oldSticker.description;
         const newDesc = newSticker.description === "" || newSticker.description === null ? "*not set*" : newSticker.description;
         embed
-            .addField("Old description", oldDesc, true)
-            .addField("New descritpion", newDesc,true);
+            .addFields({name: "Old description",value: oldDesc},
+            {name: "New descritpion",value: newDesc});
             changeCount++;
       }
       if (oldSticker.tags !== newSticker.tags) {
         embed
-            .addField("Old emoji",":" + oldSticker.tags + ":",true)
-            .addField("New emoji",":" + newSticker.tags + ":",true);
+            .addFields({name: "Old emoji",value: ":" + oldSticker.tags + ":"},
+            {name: "New emoji",value: ":" + newSticker.tags + ":"});
         changeCount++;
       }
 
       if (changeCount < 1) return;
 
-      const audit = await fetchAudit(newSticker.guild!, "STICKER_UPDATE");
+      const audit = await fetchAudit(newSticker.guild!, AuditLogEvent.StickerUpdate);
       if (audit?.executor && audit.target) {
         if ((audit?.target as Sticker).id === newSticker.id)
-          embed.addField("Updated by", audit!.executor!.toString());
+          embed.addFields({name: "Updated by",value: audit!.executor!.toString()});
       }
         
-      const comp = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle("LINK")
+      const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Link)
           .setURL(newSticker.url)
           .setLabel("Open in Browser")
       );

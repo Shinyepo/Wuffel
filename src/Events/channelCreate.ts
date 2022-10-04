@@ -1,4 +1,4 @@
-import { GuildChannel, TextBasedChannel } from "discord.js";
+import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -19,13 +19,13 @@ export = {
     ) as TextBasedChannel;
     if (!logChannel) return;
 
-    const chType = channel.type === "GUILD_STAGE_VOICE" ? "🏟️" : channel.type === "GUILD_CATEGORY" ? "🔖" : channel.type === "GUILD_VOICE" ? "🔊" : "🗒️"
+    const chType = channel.type === ChannelType.GuildStageVoice ? "🏟️" : channel.type === ChannelType.GuildCategory ? "🔖" : channel.type === ChannelType.GuildVoice ? "🔊" : "🗒️"
 
     const embed = new InfoEmbed(client)
       .setTitle("A new Channel was created.")
-      .addField("Type", chType, true)
-      .addField("Channel", channel.toString(), true)
-      .addField("Category", channel.parent?.name ?? "-", true);
+      .addFields({name: "Type",value: chType,inline: true},
+      {name: "Channel",value: channel.toString(),inline: true},
+      {name: "Category",value: channel.parent?.name ?? "-",inline: true});
 
 
     return logChannel.send({ embeds: [embed] });

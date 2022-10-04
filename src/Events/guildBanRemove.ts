@@ -1,4 +1,4 @@
-import { GuildBan, TextBasedChannel, User } from "discord.js";
+import { AuditLogEvent, GuildBan, TextBasedChannel, User } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
@@ -19,20 +19,20 @@ export = {
     const { user, reason, guild } = await ban;
 
     const embed = new InfoEmbed(client)
-      .setColor("GREEN")
+      .setColor("Green")
       .setTitle("User was unbanned")
       .setThumbnail(
-        user.displayAvatarURL({ dynamic: true }) ?? user.defaultAvatarURL
+        user.displayAvatarURL({ forceStatic: false }) ?? user.defaultAvatarURL
       )
-      .addField("User", user.toString(), true);
+      .addFields({name: "User",value: user.toString(), inline: true});
 
-      const audit = await fetchAudit(guild, "MEMBER_BAN_REMOVE");
+      const audit = await fetchAudit(guild, AuditLogEvent.MemberBanRemove);
       if (audit?.executor && audit.target) {
         if ((audit?.target as User).id === user.id)
-          embed.addField("Deleted by", audit!.executor!.toString());
+          embed.addFields({name: "Deleted by",value: audit!.executor!.toString()});
       }
     
-    embed.addField("Reason", reason ? reason : "*not specified*");
+    embed.addFields({name: "Reason",value: reason ? reason : "*not specified*"});
 
     return logChannel.send({ embeds: [embed] });
   },

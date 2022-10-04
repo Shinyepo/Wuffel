@@ -1,4 +1,4 @@
-import { GuildEmoji, MessageActionRow, MessageButton, TextBasedChannel } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, GuildEmoji, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
 import { getLogSettings } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -23,19 +23,17 @@ export = {
     const embed = new InfoEmbed(client)
       .setTitle("Emoji has been deleted")
       .setThumbnail(emoji.url)
-      .addField("Name", emoji.name!, true)
-      .addField("Was it animated?", emoji.animated! + "", true)
-      .setColor("RED")
+      .addFields({name: "Name",value: emoji.name!,inline: true},
+      {name: "Was it animated?",value: emoji.animated! + "",inline: true})
+      .setColor("Red")
 
-    const comp = new MessageActionRow().addComponents(
-      new MessageButton()
-        .setStyle("LINK")
+    const comp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setStyle(ButtonStyle.Link)
         .setURL(emoji.url)
         .setLabel("Open in Browser")
     );
 
     return await channel.send({ embeds: [embed], components: [comp] });
-
-    return 
   },
 } as EventType;

@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { MessageActionRow, MessageButton, MessageSelectMenu } from "discord.js";
-import nanoid from "nanoid";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType, ComponentType, SelectMenuBuilder } from "discord.js";
+import {nanoid} from "nanoid";
 import { SlashCommandType } from "../../types";
 import { setLogChannel } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
@@ -22,12 +22,12 @@ export = {
     const eventId = "event-" + nanoid();
     const saveId = "save-" + nanoid();
 
-    const channelMenu = new MessageSelectMenu()
+    const channelMenu = new SelectMenuBuilder()
       .setCustomId(channelId)
       .setPlaceholder("Select Channel");
 
     for (const channel of interaction.guild!.channels.cache.values()) {
-      if (channel.type === "GUILD_TEXT") {
+      if (channel.type === ChannelType.GuildText) {
         channelMenu.addOptions([
           {
             label: "#" + channel.name,
@@ -37,8 +37,8 @@ export = {
       }
     }
 
-    const eventComp = new MessageActionRow().addComponents(
-      new MessageSelectMenu()
+    const eventComp = new ActionRowBuilder<SelectMenuBuilder>().addComponents(
+      new SelectMenuBuilder()
         .setCustomId(eventId)
         .setPlaceholder("Select Event")
         .addOptions(
@@ -53,32 +53,32 @@ export = {
           { label: "Emoji Events", value: "emojiEvents" }
         )
     );
-    const channelComp = new MessageActionRow().addComponents(channelMenu);
-    const saveComp = new MessageActionRow().addComponents(
-      new MessageButton()
+    const channelComp = new ActionRowBuilder<SelectMenuBuilder>().addComponents(channelMenu);
+    const saveComp = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
         .setCustomId(saveId)
         .setLabel("Save")
-        .setStyle("SUCCESS")
+        .setStyle(ButtonStyle.Success)
     );
     let data = {
       event: "",
       channel: "",
     };
 
-    const filterSave = (i) =>
-      i.customId === saveId && i.user.id === interaction.user.id;
-    const filterEvent = (i) =>
+    const filterSave = (i: any) =>
+      i.customId === saveId && i.user.id === interaction.user?.id;
+    const filterEvent = (i: any) =>
       (i.customId === eventId || i.customId === channelId) && i.user.id === interaction.member?.user.id;
 
     const selectCollector =
       interaction.channel!.createMessageComponentCollector({
-        componentType: "SELECT_MENU",
+        componentType: ComponentType.SelectMenu,
         time: 30000,
         filter: filterEvent,
       });
     const buttonCollector =
       interaction.channel!.createMessageComponentCollector({
-        componentType: "BUTTON",
+        componentType: ComponentType.Button,
         time: 30000,
         filter: filterSave,
       });
@@ -107,24 +107,27 @@ export = {
             data.channel
           );
           if (result) {
-            return await i.update({
+            await i.update({
               content: `Successfully changed settings for the event`,
               embeds: [],
               components: [],
             });
+            return;
           }
-          return await i.update({
+          await i.update({
             content:
               "Something went wrong while setting channel for the event.",
             embeds: [],
             components: [],
           });
-        } else {
+          return;
+        } else {  
           data.channel = "";
           data.event = "";
           await i.update({
             content: "**---->  Please select Event and Channel.  <----**",
           });
+          return;
         }
       }
     });

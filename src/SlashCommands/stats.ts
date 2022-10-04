@@ -1,7 +1,7 @@
 import format from "format-duration";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommandType } from "../../types";
-import { MessageEmbed } from "discord.js";
+import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   data: new SlashCommandBuilder()
@@ -11,19 +11,43 @@ export = {
   async execute(client, interaction) {
     const formatedTime = format(client.uptime!);
 
-    const em = new MessageEmbed()
+    const em = new InfoEmbed(client)
       .setTitle("Statistics of the shard this guild is on.")
-      .addField("Shard Id", client.shard!.ids[0].toString(), true)
-      .addField("# of guilds", client.guilds.cache.size.toString(), true)
-      .addField(
-        "# of users",
-        client.guilds.cache.reduce((a, g) => a + g.memberCount, 0).toString(),
-        true
-      )
-      .addField("# of shards", client.shard!.count.toString(), true)
-      .addField("API Ping", client.ws.ping.toString(), true)
-      .addField("Uptime", formatedTime, true);
+      .addFields(
+        {
+          name: "Shard Id",
+          value: client.shard!.ids[0].toString(),
+          inline: true,
+        },
+        {
+          name: "# of guilds",
+          value: client.guilds.cache.size.toString(),
+          inline: true,
+        },
+        {
+          name: "# of users",
+          value: client.guilds.cache
+            .reduce((a, g) => a + g.memberCount, 0)
+            .toString(),
+          inline: true,
+        },
+        {
+          name: "# of shards",
+          value: client.shard!.count.toString(),
+          inline: true,
+        },
+        {
+          name: "API Ping",
+          value: client.ws.ping.toString(),
+          inline: true,
+        },
+        {
+          name: "Uptime",
+          value: formatedTime,
+          inline: true,
+        }
+      );
 
-    return await interaction.channel!.send({ embeds: [em] });
+    return await interaction.reply({ embeds: [em] });
   },
 } as SlashCommandType;
