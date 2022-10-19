@@ -24,9 +24,11 @@ export = {
     if (!logChannel) return;
     // const data = await fetchAudit(member.guild, AuditLogEvent.MemberKick);
     // if (!data) {
+      const avatar = member.avatarURL() ?? member.displayAvatarURL();
       const em = new InfoEmbed(client)
         .setColor("Red")
         .setTitle("A user left the server")
+        .setThumbnail(avatar)
         .addFields({ name: "User", value: member.toString() });
 
       return await logChannel.send({ embeds: [em] });

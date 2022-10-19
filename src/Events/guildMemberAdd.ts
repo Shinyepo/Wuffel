@@ -23,9 +23,12 @@ export = {
       (x) => x.id === settings.channel
     ) as TextBasedChannel;
     if (!logChannel) return;
+
+    const avatar = member.avatarURL() ?? member.displayAvatarURL();
       const em = new InfoEmbed(client)
         .setColor("Green")
         .setTitle("A user joined the server")
+        .setThumbnail(avatar)
         .addFields({ name: "User", value: member.toString() });
 
       return await logChannel.send({ embeds: [em] });

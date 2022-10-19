@@ -4,8 +4,8 @@ export const fetchAudit = async (guild: Guild, type: GuildAuditLogsResolvable, l
     const audit = (await guild.fetchAuditLogs({limit, type})).entries.first();
 
     if (audit) {
-        const { executor, target } = audit;
-        return {executor, target};
+        const { executor, target, changes, createdTimestamp } = audit;
+        return {executor, target, changes, createdTimestamp};
     }
     return null;
 }
