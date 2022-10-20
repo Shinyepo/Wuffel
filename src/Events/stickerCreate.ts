@@ -7,28 +7,13 @@ import {
     TextBasedChannel,
   } from "discord.js";
   import { EventType, WuffelClient } from "../../types";
-  import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
   import { InfoEmbed } from "../Utilities/embedCreator";
   
   export = {
     name: "stickerCreate",
     on: true,
-    async execute(client: WuffelClient, sticker: Sticker) {
-      const settings = await getLogSettings(
-        client.em,
-        sticker.guild!,
-        "emojiEvents"
-      );
-  
-      if (!settings || !settings.on || !settings.channel) return null;
-  
-      const channel = sticker.guild!.channels.cache.find(
-        (x) => x.id === settings.channel
-      ) as TextBasedChannel;
-  
-      if (!channel) return null;
-      
+    async execute(client: WuffelClient, logChannel: TextBasedChannel, sticker: Sticker) {
       const desc = sticker.description === "" || sticker.description === null ? "*not set*" : sticker.description;
 
       const embed = new InfoEmbed(client)
@@ -55,7 +40,7 @@ import { fetchAudit } from "../Utilities/auditFetcher";
           .setLabel("Open in Browser")
       );
   
-      return await channel.send({ embeds: [embed], components: [comp] });
+      return await logChannel.send({ embeds: [embed], components: [comp] });
     },
   } as EventType;
   

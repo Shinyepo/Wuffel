@@ -1,24 +1,11 @@
 import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
-import { getLogSettings } from "../Services/LogsService";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "channelDelete",
   on: true,
-  async execute(client: WuffelClient, channel: GuildChannel) {
-    const settings = await getLogSettings(
-      client.em,
-      channel.guild,
-      "channelEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-    const logChannel = channel.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-    if (!logChannel) return;
-
+  async execute(client: WuffelClient, logChannel: TextBasedChannel, channel: GuildChannel) {
     const chType =
       channel.type === ChannelType.GuildStageVoice
         ? "🏟️"

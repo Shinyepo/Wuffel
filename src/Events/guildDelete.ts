@@ -1,13 +1,11 @@
-import { Guild } from "discord.js";
-import { deactivateSettings } from "../Services/SettingsService";
+import { Guild, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "../Utilities/timestamp";
 
 export = {
   name: "guildDelete",
   on: true,
-  async execute(client: WuffelClient, guild: Guild) {
-    await deactivateSettings(client.em, guild);
+  async execute(client: WuffelClient, _: TextBasedChannel, guild: Guild) {
     console.log(
       consoleTimestamp() +
         " " +

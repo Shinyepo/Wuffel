@@ -1,6 +1,5 @@
 import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
-import { getLogSettings } from "../Services/LogsService";
 import { permDiff } from "../Utilities/arrayDifference";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
@@ -51,22 +50,10 @@ export = {
   on: true,
   async execute(
     client: WuffelClient,
+    logChannel: TextBasedChannel,
     oldChannel: GuildChannel,
     newChannel: GuildChannel
   ) {
-    if (!oldChannel.guild) return null;
-    const settings = await getLogSettings(
-      client.em,
-      oldChannel.guild,
-      "channelEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-    const logChannel = oldChannel.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-    if (!logChannel) return;
-
     const chType =
       oldChannel.type === ChannelType.GuildStageVoice
         ? "🏟️"

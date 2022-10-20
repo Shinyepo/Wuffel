@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, TextBasedChannel } from "discord.js";
 import { CommandType, WuffelClient } from "../../types";
 import { getSettings } from "../Services/SettingsService";
 
@@ -6,7 +6,7 @@ export = {
   name: "messageCreate",
   on: true,
 
-  async execute(client: WuffelClient, message: Message) {
+  async execute(client: WuffelClient, _: TextBasedChannel, message: Message) {
     if (message.author.bot) return;
     const settings = await getSettings(client.em.fork(), message.guild!);
 

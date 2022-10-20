@@ -1,6 +1,5 @@
 import { GuildMember, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
-import { getLogSettings } from "../Services/LogsService";
 import { queueChange } from "../Services/RoleChangeService";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
@@ -9,20 +8,10 @@ export = {
   on: true,
   async execute(
     client: WuffelClient,
+    logChannel: TextBasedChannel,
     oldMember: GuildMember,
     newMember: GuildMember
   ) {
-    const settings = await getLogSettings(
-      client.em,
-      newMember.guild,
-      "userEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-    const logChannel = newMember.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-    if (!logChannel) return;
     let n = 0;
 
     const em = new InfoEmbed(client)
@@ -53,6 +42,7 @@ export = {
       if (!newMember.roles.cache.find((x) => x.id === role.id)) {
         await queueChange(
           client,
+          logChannel,
           newMember.guild,
           newMember.id,
           role.id,
@@ -62,7 +52,7 @@ export = {
     });
     newMember.roles.cache.forEach(async (role) => {
       if (!oldMember.roles.cache.find((x) => x.id === role.id)) {
-        await queueChange(client, newMember.guild, newMember.id, role.id, true);
+        await queueChange(client, logChannel, newMember.guild, newMember.id, role.id, true);
       }
     });
     if (oldMember.user.bannerURL() !== newMember.user.bannerURL()) {

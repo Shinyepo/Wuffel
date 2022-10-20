@@ -1,8 +1,7 @@
-import { ChannelType, Guild } from "discord.js";
+import { Guild, TextBasedChannel } from "discord.js";
 import { WuffelClient } from "Wuffel/types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 import { consoleTimestamp } from "../Utilities/timestamp";
-import { getLogSettings } from "./LogsService";
 
 type ChangeArray = {
   guildId: string;
@@ -22,6 +21,7 @@ let active = false;
 
 export const queueChange = async (
   client: WuffelClient,
+  logChannel: TextBasedChannel,
   guild: Guild,
   userId: string,
   roleId: string,
@@ -52,25 +52,19 @@ export const queueChange = async (
       ],
     });
   }
-  if (!active) await changeWatcher(client);
+  if (!active) await changeWatcher(client, logChannel);
 };
 
-const changeWatcher = async (client: WuffelClient) => {
+const changeWatcher = async (
+  client: WuffelClient,
+  logChannel: TextBasedChannel
+) => {
   console.log(consoleTimestamp() + " Role change watcher initialized");
   active = true;
   await setTimeout(async () => {
     data.forEach(async (element) => {
       const guild = client.guilds.cache.find((x) => x.id === element.guildId);
       if (!guild) return;
-      const settings = await getLogSettings(client.em, guild, "userEvents");
-
-      if (!settings?.channel || !settings.on) return;
-
-      const logChannel = guild.channels.cache.find(
-        (x) => x.id === settings.channel
-      );
-
-      if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
       element.data.forEach(async (data) => {
         const user = guild.members.cache.find((x) => x.id === data.userId);
         const embed = new InfoEmbed(client)
@@ -82,7 +76,6 @@ const changeWatcher = async (client: WuffelClient) => {
           });
         let formated = "";
         data.roles.forEach((roleData) => {
-
           const role = guild.roles.cache.find((x) => x.id === roleData.roleId);
           if (roleData.action) {
             formated += "✅ ";

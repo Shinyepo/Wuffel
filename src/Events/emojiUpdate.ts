@@ -5,27 +5,13 @@ import {
   GuildEmoji,
   TextBasedChannel,
 } from "discord.js";
-import { EventType } from "Wuffel/types";
-import { getLogSettings } from "../Services/LogsService";
+import { EventType, WuffelClient } from "Wuffel/types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "emojiUpdate",
   on: true,
-  async execute(client, oldEmoji: GuildEmoji, newEmoji: GuildEmoji) {
-    const settings = await getLogSettings(
-      client.em,
-      newEmoji.guild,
-      "emojiEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-
-    const channel = oldEmoji.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-
-    if (!channel) return null;
+  async execute(client: WuffelClient, logChannel: TextBasedChannel, oldEmoji: GuildEmoji, newEmoji: GuildEmoji) {
 
     const oldName = oldEmoji.name;
 
@@ -59,6 +45,6 @@ export = {
         .setLabel("Open in Browser")
     );
 
-    return await channel.send({ embeds: [embed], components: [comp] });
+    return await logChannel.send({ embeds: [embed], components: [comp] });
   },
 } as EventType;

@@ -45,7 +45,7 @@ const main = async () => {
   await loadCommands(client, "SlashCommands");
 
   // Loading commands from ./Commands
-  await loadCommands(client, "Commands");
+  // await loadCommands(client, "Commands");
 
   // Loading events from ./Events
   await loadEvents(client);

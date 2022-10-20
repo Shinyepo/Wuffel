@@ -1,12 +1,12 @@
 import { EntityManager } from "@mikro-orm/knex";
 import { Guild } from "discord.js";
-import { LogObject } from "Wuffel/types";
+import { EventSettings, LogObject } from "../../types";
 import { LogSettings } from "../Entities/LogSettings";
 
 export const getLogSettings = async (
   em: EntityManager,
   guild: Guild,
-  event: "messageEvents" | "channelEvents" | "userEvents" | "voicePresenceEvents" | "guildEvents" | "emojiEvents"
+  event: EventSettings
 ) => {
   const context = em.fork();
   const data = await context.findOne(LogSettings, { guildId: guild.id });

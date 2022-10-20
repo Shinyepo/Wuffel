@@ -1,22 +1,13 @@
 import { AuditLogEvent, GuildBan, TextBasedChannel, User } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
-import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "guildBanRemove",
   on: true,
-  async execute(client: WuffelClient, ban: GuildBan) {
-    const settings = await getLogSettings(client.em, ban.guild, "guildEvents");
-
-    if (!settings || !settings.on || !settings.channel) return null;
-
-    const logChannel = ban.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-    if (!logChannel) return;
-    const { user, reason, guild } = await ban;
+  async execute(client: WuffelClient, logChannel: TextBasedChannel, ban: GuildBan) {
+    const { user, reason, guild } = ban;
 
     const embed = new InfoEmbed(client)
       .setColor("Green")

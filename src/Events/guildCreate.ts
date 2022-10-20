@@ -1,13 +1,11 @@
-import { Guild } from "discord.js";
-import { getSettings } from "../Services/SettingsService";
+import { Guild, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "../Utilities/timestamp";
 
 export = {
   name: "guildCreate",
   on: true,
-  async execute(client: WuffelClient, guild: Guild) {
-    await getSettings(client.em, guild);
+  async execute(client: WuffelClient, _: TextBasedChannel, guild: Guild) {
     console.log(
       consoleTimestamp() +
         " " +

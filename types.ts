@@ -40,3 +40,13 @@ export class LogObject {
   channel?: String;
   ignored?: IgnoredLogObject;
 }
+
+
+export enum EventSettings {
+  messageEvents = "messageEvents",
+  channelEvents = "channelEvents",
+  userEvents = "userEvents",
+  voicePresenceEvents = "voicePresenceEvents",
+  guildEvents = "guildEvents",
+  emojiEvents = "emojiEvents"
+}

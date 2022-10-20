@@ -3,8 +3,7 @@ import {
   insertStartedStream,
 } from "../Services/StreamerService";
 import { EventType, WuffelClient } from "../../types";
-import { AuditLogEvent, ChannelType, User, VoiceState } from "discord.js";
-import { getLogSettings } from "../Services/LogsService";
+import { AuditLogEvent, TextBasedChannel, User, VoiceState } from "discord.js";
 import { InfoEmbed } from "../Utilities/embedCreator";
 import { fetchAudit } from "../Utilities/auditFetcher";
 
@@ -13,6 +12,7 @@ export = {
   on: true,
   async execute(
     client: WuffelClient,
+    logChannel: TextBasedChannel,
     oldState: VoiceState,
     newState: VoiceState
   ) {
@@ -23,20 +23,6 @@ export = {
         return await addStreamerRanking(client.em, newState);
       }
     }
-
-    const settings = await getLogSettings(
-      client.em,
-      newState.guild,
-      "voicePresenceEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return;
-
-    const logChannel = newState.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    );
-
-    if (!logChannel || logChannel.type !== ChannelType.GuildText) return;
 
     const embed = new InfoEmbed(client)
       .setTitle("Voice presence change")
@@ -112,13 +98,16 @@ export = {
         );
         const currTime = new Date().getTime();
         const diff = currTime - audit!.createdTimestamp;
-        console.log({curr: new Date(currTime), audit: new Date(audit!.createdTimestamp)});
-        
-        console.log({diff});
-        
+        console.log({
+          curr: new Date(currTime),
+          audit: new Date(audit!.createdTimestamp),
+        });
+
+        console.log({ diff });
+
         if (diff < 45000 && diff > -45000) {
           console.log(true);
-          
+
           embed
             .addFields({
               name: "Moved by*",

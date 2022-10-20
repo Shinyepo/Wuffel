@@ -1,24 +1,12 @@
 import { AuditLogEvent, Role, TextBasedChannel } from "discord.js";
 import { EventType, WuffelClient } from "Wuffel/types";
-import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "roleUpdate",
   on: true,
-  async execute(client: WuffelClient, oldRole: Role, newRole: Role) {
-    const settings = await getLogSettings(
-      client.em,
-      newRole.guild,
-      "guildEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-    const logChannel = newRole.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-    if (!logChannel) return;
+  async execute(client: WuffelClient, logChannel: TextBasedChannel, oldRole: Role, newRole: Role) {
 
     const embed = new InfoEmbed(client)
       .setTitle("A Role was updated.")
@@ -29,8 +17,8 @@ export = {
 
     if (oldRole.name !== newRole.name) {
       embed.addFields(
-        { name: "Old name", value: oldRole.name },
-        { name: "New name", value: newRole.name }
+        { name: "Old name", value: oldRole.name, inline: true },
+        { name: "New name", value: newRole.name, inline: true }
       );
       changeCount++;
     }
@@ -38,7 +26,8 @@ export = {
       embed.addFields({
         name: "Old color",
         value: oldRole.hexColor.toString(),
-      });
+      },
+      {name: "New color", value: newRole.color.toString(), inline: true});
       changeCount++;
     }
     if (oldRole.icon !== newRole.icon) {

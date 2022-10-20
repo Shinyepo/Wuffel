@@ -1,27 +1,13 @@
 import { AuditLogEvent, Message, TextBasedChannel, User } from "discord.js";
 import { EventType, WuffelClient } from "../../types";
-import { getLogSettings } from "../Services/LogsService";
 import { fetchAudit } from "../Utilities/auditFetcher";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "messageDelete",
   on: true,
-  async execute(client: WuffelClient, message: Message) {
+  async execute(client: WuffelClient, logChannel: TextBasedChannel, message: Message) {
     if (message.author?.bot || !message.guild) return null;
-    const settings = await getLogSettings(
-      client.em,
-      message.guild,
-      "messageEvents"
-    );
-
-    if (!settings || !settings.on || !settings.channel) return null;
-
-    const channel = message.guild.channels.cache.find(
-      (x) => x.id === settings.channel
-    ) as TextBasedChannel;
-
-    if (!channel) return null;
     const content =
       message.content ?? "*Could not load message content.*";
     
@@ -41,6 +27,6 @@ export = {
           em.addFields({name: "Deleted by",value: audit!.executor!.toString()});
       }
 
-    return channel.send({ embeds: [em] });
+    return logChannel.send({ embeds: [em] });
   },
 } as EventType;

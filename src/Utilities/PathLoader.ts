@@ -2,6 +2,7 @@ import fs from "fs";
 import { CommandType, EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "./timestamp";
 import path from "path";
+import { verifyEventSettings } from "../Middleware/verifyEventSettings";
 
 export const loadCommands = async (
   client: WuffelClient,
@@ -16,18 +17,19 @@ export const loadCommands = async (
     .filter((x) => x.endsWith(".js"));
 
   for (const file of commandFiles) {
-    const fileName = file.split(".")[0];    
-    const command = (await import(
-      joinedPath + "/" + fileName
-    )) as CommandType;
-    
+    const fileName = file.split(".")[0];
+    const command = (await import(joinedPath + "/" + fileName)) as CommandType;
+
     client.commands.set(command.data.name, command);
   }
 
   const end = Date.now();
   const sw = (end - start) / 1000;
   console.log(
-    consoleTimestamp() + ` Finished loading ${name || folderPath} in ` + sw + "s"
+    consoleTimestamp() +
+      ` Finished loading ${name || folderPath} in ` +
+      sw +
+      "s"
   );
 };
 
@@ -44,7 +46,12 @@ export const loadEvents = async (client: WuffelClient): Promise<void> => {
     if (event.once) {
       client.once(event.name, (...args) => event.execute(...args));
     } else if (event.on) {
-      client.on(event.name, (...args) => event.execute(client, ...args));
+      client.on(event.name, async (...args) => {
+        const logChannel  = await verifyEventSettings(client, event.name, ...args);
+        
+        if (!logChannel) return;
+        event.execute(client, logChannel, ...args);
+      });
       // client.on(event.name, event.execute.bind(null, client));
     }
   }
