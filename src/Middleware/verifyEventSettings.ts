@@ -22,8 +22,8 @@ export const verifyEventSettings = async (
     event = EventSettings.voicePresenceEvents;
   else if (eventName.includes("channel")) event = EventSettings.channelEvents;
   else if (eventName.includes("message")) event = EventSettings.messageEvents;
-  else if (eventName.includes("guildMemberUpdate"))
-    event = EventSettings.userEvents;
+
+  if (eventName.includes("guildMemberUpdate")) event = EventSettings.userEvents;
 
   if (!event) return;
 
