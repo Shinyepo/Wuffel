@@ -1,24 +1,26 @@
 import { GuildMember, TextBasedChannel } from "discord.js";
-import { addTraffic } from "../Services/TrafficService";
 import { EventType, WuffelClient } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
   name: "guildMemberRemove",
   on: true,
-  async execute(client: WuffelClient, logChannel: TextBasedChannel, member: GuildMember) {
-    await addTraffic(client.em, member, false);
-    console.log("Added new traffic");
+  async execute(
+    client: WuffelClient,
+    logChannel: TextBasedChannel,
+    member: GuildMember
+  ) {
     // const data = await fetchAudit(member.guild, AuditLogEvent.MemberKick);
     // if (!data) {
-      const avatar = member.avatarURL() ?? member.displayAvatarURL();
-      const em = new InfoEmbed(client)
-        .setColor("Red")
-        .setTitle("A user left the server")
-        .setThumbnail(avatar)
-        .addFields({ name: "User", value: member.toString() });
 
-      return await logChannel.send({ embeds: [em] });
+    const avatar = member.avatarURL() ?? member.displayAvatarURL();
+    const em = new InfoEmbed(client)
+      .setColor("Red")
+      .setTitle("A user left the server")
+      .setThumbnail(avatar)
+      .addFields({ name: "User", value: member.toString() });
+
+    return await logChannel.send({ embeds: [em] });
     // }
 
     // if (data.target?.toString() === member.toString()) {
