@@ -34,8 +34,6 @@ export const verifyEventSettings = async (
   if (userEvents.indexOf(eventName) > -1) event = EventSettings.userEvents;
   if (voicePresenceEvents.indexOf(eventName) > -1)
     event = EventSettings.voicePresenceEvents;
-
-    console.log({event, eventName});
     
   if (!event) return;
 

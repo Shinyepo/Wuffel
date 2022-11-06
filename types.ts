@@ -87,7 +87,7 @@ export const emojiEvents = [
 export const userEvents = [
   "guildBanAdd",
   "guildBanRemove",
+  "guildMemberUpdate",
+  "guildMemberRemove",
   "guildMemberAdd",
-  "guildMemberRemove",
-  "guildMemberRemove",
 ];

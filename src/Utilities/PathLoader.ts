@@ -3,6 +3,8 @@ import { CommandType, EventType, WuffelClient } from "../../types";
 import { consoleTimestamp } from "./timestamp";
 import path from "path";
 import { verifyEventSettings } from "../Middleware/verifyEventSettings";
+import { GuildMember } from "discord.js";
+import { addTraffic } from "../Services/TrafficService";
 
 const ignoreEvents = ["guildCreate", "guildDelete", "messageCreate"];
 
@@ -49,6 +51,14 @@ export const loadEvents = async (client: WuffelClient): Promise<void> => {
       client.once(event.name, (...args) => event.execute(...args));
     } else if (event.on) {
       client.on(event.name, async (...args) => {
+        if (event.name === "guildMemberAdd") {
+          await addTraffic(client.em, args[0] as GuildMember, true);
+          console.log("Added new traffic");
+        }
+        if (event.name === "guildMemberRemove") {
+          await addTraffic(client.em, args[0] as GuildMember, false);
+          console.log("Added new traffic");
+        }
         if (ignoreEvents.indexOf(event.name) !== -1) {
           return event.execute(client, null, ...args);
         }
