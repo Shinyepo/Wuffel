@@ -1,5 +1,14 @@
 import { Guild, TextBasedChannel } from "discord.js";
-import { EventSettings, WuffelClient } from "../../types";
+import {
+  channelEvents,
+  emojiEvents,
+  EventSettings,
+  guildEvents,
+  messageEvents,
+  userEvents,
+  voicePresenceEvents,
+  WuffelClient,
+} from "../../types";
 import { getLogSettings } from "../Services/LogsService";
 
 export const verifyEventSettings = async (
@@ -16,15 +25,18 @@ export const verifyEventSettings = async (
   if (!guild) return console.log("Could not find guild");
 
   let event;
-  if (eventName.includes("guild")) event = EventSettings.guildEvents;
-  else if (eventName.includes("emoji")) event = EventSettings.emojiEvents;
-  else if (eventName.includes("voice"))
+  if (messageEvents.indexOf(eventName) > -1)
+    event = EventSettings.messageEvents;
+  if (guildEvents.indexOf(eventName) > -1) event = EventSettings.guildEvents;
+  if (emojiEvents.indexOf(eventName) > -1) event = EventSettings.emojiEvents;
+  if (channelEvents.indexOf(eventName) > -1)
+    event = EventSettings.channelEvents;
+  if (userEvents.indexOf(eventName) > -1) event = EventSettings.userEvents;
+  if (voicePresenceEvents.indexOf(eventName) > -1)
     event = EventSettings.voicePresenceEvents;
-  else if (eventName.includes("channel")) event = EventSettings.channelEvents;
-  else if (eventName.includes("message")) event = EventSettings.messageEvents;
 
-  if (eventName.includes("guildMemberUpdate")) event = EventSettings.userEvents;
-
+    console.log({event, eventName});
+    
   if (!event) return;
 
   const settings = await getLogSettings(client.em, guild, event);

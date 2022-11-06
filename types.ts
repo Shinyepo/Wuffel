@@ -1,11 +1,19 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { ChatInputCommandInteraction, Client, Collection, Message } from "discord.js";
+import {
+  ChatInputCommandInteraction,
+  Client,
+  Collection,
+  Message,
+} from "discord.js";
 
 export type SlashCommandType = {
   data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
   permissionLevel?: "all" | "guildMember" | "mod" | "admin" | "owner";
-  execute: (client: WuffelClient, interaction: ChatInputCommandInteraction) => void;
+  execute: (
+    client: WuffelClient,
+    interaction: ChatInputCommandInteraction
+  ) => void;
 };
 export type CommandType = {
   data: {
@@ -41,12 +49,45 @@ export class LogObject {
   ignored?: IgnoredLogObject;
 }
 
-
 export enum EventSettings {
   messageEvents = "messageEvents",
   channelEvents = "channelEvents",
   userEvents = "userEvents",
   voicePresenceEvents = "voicePresenceEvents",
   guildEvents = "guildEvents",
-  emojiEvents = "emojiEvents"
+  emojiEvents = "emojiEvents",
 }
+
+export const messageEvents = [
+  "messageDelete",
+  "messageUpdate",
+  "messageDeleteBulk",
+];
+export const guildEvents = [
+  "invireCreate",
+  "inviteDelete",
+  "roleCreate",
+  "roleDelete",
+  "roleUpdate",
+];
+export const channelEvents = [
+  "channelCreate",
+  "channelDelete",
+  "channelUpdate",
+];
+export const voicePresenceEvents = ["voiceStateUpdate"];
+export const emojiEvents = [
+  "emojiCreate",
+  "emojiDelete",
+  "emojiUpdate",
+  "stickerCreate",
+  "stickerDelete",
+  "stickerUpdate",
+];
+export const userEvents = [
+  "guildBanAdd",
+  "guildBanRemove",
+  "guildMemberAdd",
+  "guildMemberRemove",
+  "guildMemberRemove",
+];

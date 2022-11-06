@@ -4,6 +4,8 @@ import { consoleTimestamp } from "./timestamp";
 import path from "path";
 import { verifyEventSettings } from "../Middleware/verifyEventSettings";
 
+const ignoreEvents = ["guildCreate", "guildDelete", "messageCreate"];
+
 export const loadCommands = async (
   client: WuffelClient,
   folderPath: string,
@@ -47,10 +49,18 @@ export const loadEvents = async (client: WuffelClient): Promise<void> => {
       client.once(event.name, (...args) => event.execute(...args));
     } else if (event.on) {
       client.on(event.name, async (...args) => {
-        const logChannel  = await verifyEventSettings(client, event.name, ...args);
-        
+        if (ignoreEvents.indexOf(event.name) !== -1) {
+          return event.execute(client, null, ...args);
+        }
+        const logChannel = await verifyEventSettings(
+          client,
+          event.name,
+          ...args
+        );
+
         if (!logChannel) return;
-        event.execute(client, logChannel, ...args);
+
+        return event.execute(client, logChannel, ...args);
       });
       // client.on(event.name, event.execute.bind(null, client));
     }
