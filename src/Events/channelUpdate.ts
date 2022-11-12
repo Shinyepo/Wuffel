@@ -74,8 +74,9 @@ export = {
           inline: true,
         }
       );
-
+        
     for (let [key, value] of Object.entries(oldChannel)) {
+      if (!keyArray[key]) continue;
       const newValue = (newChannel as any)[key];
 
       if (value !== newValue) {
@@ -125,7 +126,8 @@ export = {
             oldChannel.parent?.name === undefined
               ? "-"
               : oldChannel.parent.name;
-        }
+        }        
+        
         embed.addFields({
           name: keyArray[key],
           value:

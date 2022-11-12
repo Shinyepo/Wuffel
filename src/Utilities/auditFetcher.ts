@@ -1,11 +1,17 @@
-import { Guild,  GuildAuditLogsResolvable } from "discord.js";
+import { Guild, GuildAuditLogsResolvable } from "discord.js";
 
-export const fetchAudit = async (guild: Guild, type: GuildAuditLogsResolvable, limit = 1) => {
-    const audit = (await guild.fetchAuditLogs({limit, type})).entries.first();
+export const fetchAudit = async (
+  guild: Guild,
+  type: GuildAuditLogsResolvable,
+  limit = 1
+) => {
+  const audit = (await guild.fetchAuditLogs({ limit, type })).entries.first();
 
-    if (audit) {
-        const { executor, target, changes, createdTimestamp } = audit;
-        return {executor, target, changes, createdTimestamp};
+  if (audit) {
+    if (audit.createdTimestamp > new Date().getTime() - 1000 * 5) {
+      const { executor, target, changes, createdTimestamp } = audit;
+      return { executor, target, changes, createdTimestamp };
     }
-    return null;
-}
+  }
+  return null;
+};
