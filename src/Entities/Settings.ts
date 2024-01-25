@@ -38,4 +38,7 @@ export class Settings {
 
   @Property({ nullable: true })
   cleanup?: Boolean;
+
+  @Property({ type: "array" })
+  moderators: string[];
 }

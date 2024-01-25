@@ -8,7 +8,8 @@ export const createSettings = async (em: EntityManager, guild: Guild) => {
     guildId: guild.id,
     prefix: "+",
     userCount: guild.memberCount.toString(),
-    active: true
+    active: true,
+    moderators: new Array(),
   });
   await em.persistAndFlush(newEntry);
   return newEntry;
