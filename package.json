@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "tsc -w",
     "build": "tsc",
-    "dev": "nodemon dist/index.js",
+    "dev": "nodemon dist/index.js ",
     "deploy": "node dist/Slash-Commands-Deployer.js",
     "create:migration": "mikro-orm migration:create",
     "gen-env": "npx gen-env-types .env -o env.d.ts -e ."
@@ -19,24 +19,25 @@
   "dependencies": {
     "@babel/helper-compilation-targets": "^7.19.3",
     "@discordjs/builders": "^1.2.0",
-    "@discordjs/rest": "^1.2.0",
-    "@mikro-orm/cli": "^5.4.2",
-    "@mikro-orm/core": "^5.4.2",
-    "@mikro-orm/postgresql": "^5.4.2",
+    "@discordjs/rest": "^2.3.0",
+    "@mikro-orm/cli": "^6.3.0",
+    "@mikro-orm/core": "^6.3.0",
+    "@mikro-orm/postgresql": "^6.3.0",
     "discord-api-types": "^0.37.11",
     "discord.js": "^14.5.0",
-    "dotenv-safe": "^8.2.0",
-    "format-duration": "^2.0.0",
+    "dotenv-safe": "^9.1.0",
+    "format-duration": "^3.0.2",
     "moment": "^2.29.4",
-    "nanoid": "3.3.4",
+    "nanoid": "3.3.7",
     "pg": "^8.8.0",
-    "pretty-ms": "^8.0.0",
+    "pretty-ms": "^9.1.0",
     "statman-stopwatch": "^2.13.0",
-    "typescript": "^4.8.4"
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "@types/dotenv-safe": "^8.1.6",
     "@types/nanoid": "^3.0.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.1.4"
   },
   "mikro-orm": {
     "useTsNode": true,

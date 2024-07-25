@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import { SlashCommandOptionsOnlyBuilder } from "@discordjs/builders";
 import { EntityManager } from "@mikro-orm/postgresql";
 import {
   ChatInputCommandInteraction,
@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 
 export type SlashCommandType = {
-  data: Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
+  data: Omit<SlashCommandOptionsOnlyBuilder, "addSubcommand" | "addSubcommandGroup">;
   permissionLevel?: "all" | "guildMember" | "mod" | "admin" | "owner";
   execute: (
     client: WuffelClient,
@@ -42,7 +42,7 @@ export class IgnoredLogObject {
 }
 
 export class LogObject {
-  id: string;
+  id?: number;
   name: String;
   on?: Boolean;
   channel?: String;

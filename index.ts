@@ -1,7 +1,9 @@
 import { ShardingManager } from "discord.js";
 import { consoleTimestamp } from "./src/Utilities/timestamp";
+import { config } from 'dotenv-safe';
 
 const main = async () => {
+  config();
   const manager = new ShardingManager(__dirname + "/bot.js", {
     token: process.env.TOKEN,
     respawn: true,

@@ -25,13 +25,13 @@ export const setLogChannel = async (
   const context = em.fork();
   const data = await context.findOne(LogSettings, { guildId });
   const newSettings = {
-    id: "1",
     name: event,
     channel,
     on: true,
   } as LogObject;
 
   if (!data) {
+    newSettings.id = 0;
     const newEntry = await context.create(LogSettings, {
       guildId,
       settings: [newSettings],
@@ -47,7 +47,7 @@ export const setLogChannel = async (
 
   if (!settings) {
     const id = data.settings?.length! + 1;
-    newSettings.id = id.toString();
+    newSettings.id = id;
     console.log(newSettings.id);
     
     data?.settings?.push(newSettings);
