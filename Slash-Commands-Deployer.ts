@@ -31,7 +31,8 @@ console.log("Found " + commandNames.length + " commands.\n" + readyString);
 (async () => {
   try {
     console.log("Started deploying Slash Commands...");
-    await rest.put(Routes.applicationGuildCommands(applicationId, guildId), {
+    await rest.put(
+      Routes.applicationCommands(applicationId), {
       body: commands,
     });
     console.log("Successfully deployed all commands.");
