@@ -12,9 +12,21 @@ export const getLogSettings = async (
   const data = await context.findOne(LogSettings, { guildId: guild.id });
   if (!data) return null;
   const logSettings = data.settings?.find((x) => x.name === event);
-
   return logSettings;
 };
+
+
+export const createLogSettings = async (em: EntityManager, guild: Guild) => {
+  const data = await em.findOne(LogSettings, {guildId: guild.id});
+  if (!data) {
+    const newEntry = await em.create(LogSettings, {
+      guildId: guild.id,
+    });
+    await em.persistAndFlush(newEntry);
+    return newEntry;
+  }
+  return data;
+}
 
 export const setLogChannel = async (
   em: EntityManager,

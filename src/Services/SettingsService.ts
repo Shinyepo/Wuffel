@@ -2,6 +2,7 @@ import { EntityManager } from "@mikro-orm/knex";
 import { Guild, Message } from "discord.js";
 import { WuffelClient } from "Wuffel/types";
 import { Settings } from "../Entities/Settings";
+import { createLogSettings } from "./LogsService";
 
 export const createSettings = async (em: EntityManager, guild: Guild) => {
   const newEntry = await em.create(Settings, {
@@ -15,9 +16,11 @@ export const createSettings = async (em: EntityManager, guild: Guild) => {
   return newEntry;
 };
 
+
 export const getSettings = async (em: EntityManager, guild: Guild) => {
   var settings = await em.findOne(Settings, { guildId: guild.id });
   if (!settings) settings = await createSettings(em.fork(), guild);
+  await createLogSettings(em, guild);
   return settings;
 };
 
