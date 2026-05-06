@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { SlashCommandType } from "Wuffel/types";
+import { SlashCommandType } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {

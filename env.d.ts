@@ -3,5 +3,6 @@ declare namespace NodeJS {
     TOKEN: string;
     DATABASE_URL: string;
     GUILD: string;
+    APP_ID: string;
   }
 }

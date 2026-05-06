@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { WuffelClient } from "Wuffel/types";
+import { WuffelClient } from "../../types";
 
 export const handled = async (client: WuffelClient, err: string) => {
   const channel = client.guilds.cache

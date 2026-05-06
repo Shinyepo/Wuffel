@@ -1,5 +1,5 @@
 import { Guild, TextBasedChannel } from "discord.js";
-import { WuffelClient } from "Wuffel/types";
+import { WuffelClient } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 import { consoleTimestamp } from "../Utilities/timestamp";
 

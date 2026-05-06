@@ -5,7 +5,7 @@ import {
   GuildEmoji,
   TextBasedChannel,
 } from "discord.js";
-import { EventType, WuffelClient } from "Wuffel/types";
+import { EventType, WuffelClient } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {

@@ -1,6 +1,6 @@
 import { EntityManager } from "@mikro-orm/knex";
 import { Guild, Message } from "discord.js";
-import { WuffelClient } from "Wuffel/types";
+import { WuffelClient } from "../../types";
 import { Settings } from "../Entities/Settings";
 import { createLogSettings } from "./LogsService";
 

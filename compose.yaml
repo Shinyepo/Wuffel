@@ -1,0 +1,11 @@
+services:
+  wuffel:
+    image: registry.local/shinyepo/wuffel:latest
+    platform: linux/arm64/v8
+    environment:
+      TOKEN:
+      DATABASE_URL:
+      GUILD:
+      APP_ID:
+    build:
+      context: .

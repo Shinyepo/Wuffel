@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { applicationId, guildId, token } from "./config.json";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 
@@ -20,7 +19,7 @@ for (const file of commandFiles) {
   commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: "9" }).setToken(token);
+const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
 let readyString = "";
 
@@ -32,7 +31,7 @@ console.log("Found " + commandNames.length + " commands.\n" + readyString);
   try {
     console.log("Started deploying Slash Commands...");
     await rest.put(
-      Routes.applicationCommands(applicationId), {
+      Routes.applicationCommands(process.env.APP_ID), {
       body: commands,
     });
     console.log("Successfully deployed all commands.");

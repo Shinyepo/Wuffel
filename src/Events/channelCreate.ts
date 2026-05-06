@@ -1,5 +1,5 @@
 import { ChannelType, GuildChannel, TextBasedChannel } from "discord.js";
-import { EventType, WuffelClient } from "Wuffel/types";
+import { EventType, WuffelClient } from "../../types";
 import { InfoEmbed } from "../Utilities/embedCreator";
 
 export = {
@@ -14,8 +14,7 @@ export = {
       .addFields({name: "Type",value: chType,inline: true},
       {name: "Channel",value: channel.toString(),inline: true},
       {name: "Category",value: channel.parent?.name ?? "-",inline: true});
-
-
+      
     return logChannel.send({ embeds: [embed] });
   },
 } as EventType;

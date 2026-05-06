@@ -1,6 +1,6 @@
 import { EmbedAuthorData } from "@discordjs/builders";
 import { ChatInputCommandInteraction, EmbedBuilder, Message } from "discord.js";
-import { WuffelClient } from "Wuffel/types";
+import { WuffelClient } from "../../types";
 
 export class InfoEmbed extends EmbedBuilder {
   constructor(client: WuffelClient, message?: Message, data = {}) {

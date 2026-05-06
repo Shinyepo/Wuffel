@@ -6,7 +6,7 @@ import {
     Sticker,
     TextBasedChannel,
   } from "discord.js";
-  import { EventType, WuffelClient } from "Wuffel/types";
+  import { EventType, WuffelClient } from "../../types";
 import { fetchAudit } from "../Utilities/auditFetcher";
   import { InfoEmbed } from "../Utilities/embedCreator";
   
